@@ -1,0 +1,12 @@
+{
+	"HEADER": {
+		"type": "entity",
+		"id": "core:player",
+		"version": "indev",
+	},
+	"COMPONENTS": {
+		"2d_movement": {
+			"speed": 25,
+		},
+	},
+}

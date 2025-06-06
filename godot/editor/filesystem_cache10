@@ -1,38 +1,55 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1745304123
-::res://CORE/::1745304123
+::res://::1749170555
+README.md::TextFile/TextFile::-1::1745304969::0::1::::<><><>0<>0<><>::
+::res://CORE/::1745304128
 icon.svg::CompressedTexture2D/CompressedTexture2D::5438812986682836228::1745034287::1745303231::1::::<><><>0<>0<>733a99fba6ce1dda90eeb15e7ed32b28<>res://godot/imported/icon.svg-a46b998e48c4848c9aa25a999ce7df9a.ctex::
-SaveManager.gd::GDScript::100841163241356731::1745303746::0::1::::<>Node<><>0<>0<><>::
 ::res://CORE/Assets/::1745302937
-::res://CORE/Game Objects/::1745034899
-::res://CORE/Game Objects/Grid/::1745303218
-Grid.gd::GDScript/GDScript::1780731955796709407::1745034598::0::1::::<>Node2D<><>0<>0<><>::
-Grid.tscn::PackedScene/PackedScene::3383264645033256176::1745303218::0::1::::<><><>0<>0<><>::uid://0muno1y4b0r8::::res://CORE/Game Objects/Grid/Grid.gd<>uid://ctstgna6hm2gp::::res://CORE/Game Objects/Grid/Tiles.gd
+::res://CORE/Game Objects/::1748989888
+Component.gd::GDScript::8997917097404997594::1748989888::0::1::::Component<>RefCounted<><>0<>0<><>::
+::res://CORE/Game Objects/Entity/::1748989888
+Entity.gd::GDScript::6443788077061619417::1748989888::0::1::::Entity<>CharacterBody2D<><>0<>0<><>::
+::res://CORE/Game Objects/Entity/Player/::1748892076
+Player.gd::GDScript/GDScript::851933858705788382::1748892076::0::1::::Player<>Entity<><>0<>0<><>::
+::res://CORE/Game Objects/Grid/::1748988326
+Grid.gd::GDScript::1780731955796709407::1748988324::0::1::::TileGrid<>Node2D<><>0<>0<><>::
+Grid.tscn::PackedScene::3383264645033256176::1748988326::0::1::::<><><>0<>0<><>::uid://0muno1y4b0r8::::res://CORE/Game Objects/Grid/Grid.gd
 Tiles.gd::GDScript/GDScript::6144753217929793015::1745035216::0::1::::<>Node2D<><>0<>0<><>::
-::res://CORE/Game Objects/Tile/::1745034899
+::res://CORE/Game Objects/Tile/::1748988326
+Tile.gd::GDScript/GDScript::6673835396819261537::1748889673::0::1::::TileGridTile<>Area2D<><>0<>0<><>::
+Tile.tscn::PackedScene::7510440409060865119::1748988326::0::1::::<><><>0<>0<><>::uid://c2c4dgtw1ksub::::res://CORE/Game Objects/Tile/Tile.gd
 ::res://CORE/Game Scenes/::1745034326
-::res://CORE/Game Scenes/World/::1745303218
-World.tscn::PackedScene/PackedScene::8233097428659184128::1745303218::0::1::::<><><>0<>0<><>::
-::res://CORE/Scripts/::1745304120
-SandboxManager.gd::GDScript::2532560138587093963::1745303674::0::1::::<>Node<><>0<>0<><>::
-::res://CORE/Scripts/Common/::1745304123
+::res://CORE/Game Scenes/World/::1748991428
+World.gd::GDScript/GDScript::5818284449897132796::1746684906::0::1::::<>Node2D<><>0<>0<><>::
+World.tscn::PackedScene::8233097428659184128::1748991428::0::1::::<><><>0<>0<><>::uid://co5oka26arqpw::::res://CORE/Game Scenes/World/World.gd<>uid://bog44y2rup3dc::::res://CORE/Game Objects/Grid/Grid.tscn<>uid://dfad4d28ia0md::::res://CORE/Game Objects/Tile/Tile.tscn<>uid://mexhxp6snnac::::res://CORE/Game Objects/Entity/Player/Player.gd
+::res://CORE/Scripts/::1748991428
+SandboxManager.gd::GDScript::2532560138587093963::1748991428::0::1::::<>RefCounted<><>0<>0<><>::
+SaveManager.gd::GDScript/GDScript::100841163241356731::1745303746::0::1::::<>Node<><>0<>0<><>::
+::res://CORE/Scripts/Common/::1746684418
 FileUtils.gd::GDScript/GDScript::2793528524004513276::1745303806::0::1::::<>Node<><>0<>0<><>::
-MathUtils.gd::GDScript/GDScript::3546415457577295577::1745303992::0::1::::<>Node<><>0<>0<><>::
+MathUtils.gd::GDScript/GDScript::3546415457577295577::1746684418::0::1::::<>Node<><>0<>0<><>::
 TextUtils.gd::GDScript/GDScript::488411014122330353::1745303814::0::1::::<>Node<><>0<>0<><>::
 Translator.gd::GDScript/GDScript::5192393803363614527::1745303972::0::1::::<>Node<><>0<>0<><>::
 ::res://CORE/Scripts/Physics/::1745303512
 ::res://EXPORT/::1745303246
-::res://Sandbox/::1745302455
-::res://Sandbox/Assets/::1745302327
+::res://Sandbox/::1745304172
+::res://Sandbox/Assets/::1748991310
 ::res://Sandbox/Assets/Audio/::1745302081
-::res://Sandbox/Assets/Graphics/::1745302327
-::res://Sandbox/Game/::1745302678
-::res://Sandbox/Game/Entities/::1745302169
-::res://Sandbox/Game/Generation/::1745302852
-::res://Sandbox/Game/Generation/Asteroids/::1745302852
-::res://Sandbox/Game/Generation/Planets/::1745302835
-::res://Sandbox/Game/Generation/Solar Systems/::1745302788
-::res://Sandbox/Game/Items/::1745302199
-::res://Sandbox/Game/Random Events/::1745302258
-::res://Sandbox/Game/Tiles/::1745302058
+::res://Sandbox/Assets/Texture/::1745302327
+::res://Sandbox/Game/::1748991338
+::res://Sandbox/Game/Components/::1748889818
+::res://Sandbox/Game/Components/Entity/::1748989516
+2d_movement.gd::GDScript::7812294074930075891::1748989516::0::1::::Component2DMovement<>Component<><>0<>0<><>::
+user_controlled.gd::GDScript/GDScript::6924726515950489730::1748894502::0::1::::ComponentUserControlled<>Component<><>0<>0<><>::
+::res://Sandbox/Game/Components/Tile/::1748889818
+::res://Sandbox/Game/Entity/::1748988883
+player.json::JSON/JSON::-1::1748988883::0::1::::<><><>0<>0<><>::
+::res://Sandbox/Game/Generation/::1748991351
+::res://Sandbox/Game/Generation/Asteroid/::1745302852
+::res://Sandbox/Game/Generation/Planet/::1745302835
+::res://Sandbox/Game/Generation/Solar System/::1745302788
+::res://Sandbox/Game/Item/::1745302199
+::res://Sandbox/Game/Random Event/::1745302258
+::res://Sandbox/Game/Tile/::1745302058
+::res://Sandbox/Translations/::1745304567
+en_us.json::JSON/JSON::-1::1745304567::0::1::::<><><>0<>0<><>::
 ::res://Sandbox/UI/::1745302455

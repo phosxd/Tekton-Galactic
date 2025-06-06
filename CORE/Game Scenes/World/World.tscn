@@ -1,3 +1,110 @@
-[gd_scene format=3 uid="uid://dpkf6aatw6to7"]
+[gd_scene load_steps=6 format=3 uid="uid://dpkf6aatw6to7"]
+
+[ext_resource type="Script" uid="uid://co5oka26arqpw" path="res://CORE/Game Scenes/World/World.gd" id="1_g6luc"]
+[ext_resource type="PackedScene" uid="uid://bog44y2rup3dc" path="res://CORE/Game Objects/Grid/Grid.tscn" id="2_arlre"]
+[ext_resource type="PackedScene" uid="uid://dfad4d28ia0md" path="res://CORE/Game Objects/Tile/Tile.tscn" id="3_b6ypn"]
+[ext_resource type="Script" uid="uid://mexhxp6snnac" path="res://CORE/Game Objects/Entity/Player/Player.gd" id="4_arlre"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b6ypn"]
+size = Vector2(20, 32)
 
 [node name="World" type="Node2D"]
+script = ExtResource("1_g6luc")
+
+[node name="Grids" type="Node2D" parent="."]
+
+[node name="grid 1" parent="Grids" instance=ExtResource("2_arlre")]
+
+[node name="Tile" parent="Grids/grid 1/Tiles" index="0" instance=ExtResource("3_b6ypn")]
+
+[node name="grid 2" parent="Grids" instance=ExtResource("2_arlre")]
+position = Vector2(54, 50)
+
+[node name="Tile" parent="Grids/grid 2/Tiles" index="0" instance=ExtResource("3_b6ypn")]
+
+[node name="ColorRect" parent="Grids/grid 2/Tiles/Tile" index="1"]
+color = Color(0.478431, 0.478431, 1, 1)
+
+[node name="Tile2" parent="Grids/grid 2/Tiles" index="1" instance=ExtResource("3_b6ypn")]
+position = Vector2(0, 17)
+
+[node name="ColorRect" parent="Grids/grid 2/Tiles/Tile2" index="1"]
+color = Color(0.478431, 0.478431, 1, 1)
+
+[node name="grid 3" parent="Grids" instance=ExtResource("2_arlre")]
+position = Vector2(54, 171)
+
+[node name="Tile" parent="Grids/grid 3/Tiles" index="0" instance=ExtResource("3_b6ypn")]
+
+[node name="ColorRect" parent="Grids/grid 3/Tiles/Tile" index="1"]
+color = Color(2.64719e-06, 0.637781, 0.103946, 1)
+
+[node name="grid 4" parent="Grids" instance=ExtResource("2_arlre")]
+position = Vector2(-23, 123)
+
+[node name="Tile2" parent="Grids/grid 4/Tiles" index="0" instance=ExtResource("3_b6ypn")]
+position = Vector2(0, 20)
+
+[node name="ColorRect" parent="Grids/grid 4/Tiles/Tile2" index="1"]
+color = Color(0.809068, 0.283032, 0.682372, 1)
+
+[node name="Tile6" parent="Grids/grid 4/Tiles" index="1" instance=ExtResource("3_b6ypn")]
+position = Vector2(-32, 20)
+
+[node name="ColorRect" parent="Grids/grid 4/Tiles/Tile6" index="1"]
+color = Color(0.809068, 0.283032, 0.682372, 1)
+
+[node name="Tile7" parent="Grids/grid 4/Tiles" index="2" instance=ExtResource("3_b6ypn")]
+position = Vector2(-33, 3)
+
+[node name="ColorRect" parent="Grids/grid 4/Tiles/Tile7" index="1"]
+color = Color(0.809068, 0.283032, 0.682372, 1)
+
+[node name="Tile3" parent="Grids/grid 4/Tiles" index="3" instance=ExtResource("3_b6ypn")]
+position = Vector2(-18, 20)
+
+[node name="ColorRect" parent="Grids/grid 4/Tiles/Tile3" index="1"]
+color = Color(0.809068, 0.283032, 0.682372, 1)
+
+[node name="Tile5" parent="Grids/grid 4/Tiles" index="4" instance=ExtResource("3_b6ypn")]
+position = Vector2(-5, 2)
+
+[node name="ColorRect" parent="Grids/grid 4/Tiles/Tile5" index="1"]
+color = Color(0.809068, 0.283032, 0.682372, 1)
+
+[node name="Tile4" parent="Grids/grid 4/Tiles" index="5" instance=ExtResource("3_b6ypn")]
+position = Vector2(-18, 6)
+
+[node name="ColorRect" parent="Grids/grid 4/Tiles/Tile4" index="1"]
+color = Color(0.809068, 0.283032, 0.682372, 1)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.3, 0.3)
+
+[node name="Player" type="CharacterBody2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(44, -54)
+script = ExtResource("4_arlre")
+
+[node name="ColorRect" type="ColorRect" parent="Player"]
+offset_left = -10.0
+offset_top = -16.0
+offset_right = 10.0
+offset_bottom = 16.0
+
+[node name="Collider" type="CollisionShape2D" parent="Player"]
+shape = SubResource("RectangleShape2D_b6ypn")
+
+[editable path="Grids/grid 1"]
+[editable path="Grids/grid 2"]
+[editable path="Grids/grid 2/Tiles/Tile"]
+[editable path="Grids/grid 2/Tiles/Tile2"]
+[editable path="Grids/grid 3"]
+[editable path="Grids/grid 3/Tiles/Tile"]
+[editable path="Grids/grid 4"]
+[editable path="Grids/grid 4/Tiles/Tile2"]
+[editable path="Grids/grid 4/Tiles/Tile6"]
+[editable path="Grids/grid 4/Tiles/Tile7"]
+[editable path="Grids/grid 4/Tiles/Tile3"]
+[editable path="Grids/grid 4/Tiles/Tile5"]
+[editable path="Grids/grid 4/Tiles/Tile4"]
