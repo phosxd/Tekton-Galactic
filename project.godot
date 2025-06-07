@@ -11,17 +11,13 @@ config_version=5
 [application]
 
 config/name="Tekton Galactic"
-config/version="alpha-1"
+config/version="indev"
 run/main_scene="uid://dpkf6aatw6to7"
 config/use_hidden_project_data_directory=false
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/bg_color=Color(0.0923971, 0.0923971, 0.092397, 1)
 boot_splash/show_image=false
 config/icon="res://CORE/icon.svg"
-
-[autoload]
-
-MathUtils="*res://CORE/Scripts/Common/MathUtils.gd"
 
 [debug]
 
@@ -78,3 +74,4 @@ move_down_dynamic={
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+shader_compiler/shader_cache/enabled=false

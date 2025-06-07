@@ -63,7 +63,7 @@ position = Vector2(-18, 6)
 
 [node name="grid 5" parent="Grids" instance=ExtResource("2_arlre")]
 position = Vector2(-1100, 200)
-velocity = Vector2(0.6, -0.03)
+velocity = Vector2(0.1, 0)
 
 [node name="Tile2" parent="Grids/grid 5/Tiles" index="0" instance=ExtResource("3_b6ypn")]
 position = Vector2(0, 20)

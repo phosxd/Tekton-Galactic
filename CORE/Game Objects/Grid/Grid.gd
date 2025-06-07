@@ -1,6 +1,6 @@
 class_name TileGrid extends Node2D
 @export var velocity := Vector2(0,0)
-var mass:float = 0
+var mass:float = 0.0
 var center_of_mass := Vector2(0,0)
 
 signal tile_added(tile:TileGridTile)
@@ -14,6 +14,8 @@ func _ready() -> void:
 
 # Utility.
 # --------
+func get_center() -> Vector2: ## Gets center of the Grid, based on center of mass.
+	return self.center_of_mass-self.position
 
 
 # Internal Utility.
@@ -37,8 +39,9 @@ func tile_collided(first:TileGridTile, second:TileGridTile) -> void:
 	var first_grid = first.get_grid()
 	var second_grid = second.get_grid()
 	if not first_grid || not second_grid: return
-	first_grid.velocity.x = MathUtils.resolve_inelastic_bounce(first_grid.velocity.x, second_grid.velocity.x, first_grid.mass, second_grid.mass, 0)
-	first_grid.velocity.y = MathUtils.resolve_inelastic_bounce(first_grid.velocity.y, second_grid.velocity.y, first_grid.mass, second_grid.mass, 0)
+	if first_grid == second_grid: return
+	first_grid.velocity.x = MathUtils.resolve_solid_collision(first_grid.velocity.x, second_grid.velocity.x, first_grid.mass, second_grid.mass)
+	first_grid.velocity.y = MathUtils.resolve_solid_collision(first_grid.velocity.y, second_grid.velocity.y, first_grid.mass, second_grid.mass)
 
 
 
@@ -46,7 +49,7 @@ func tile_collided(first:TileGridTile, second:TileGridTile) -> void:
 func _on_tiles_child_entered_tree(node:Node) -> void:
 	if node is not TileGridTile: return
 	_calculate_mass()
-	node.area_entered.connect(tile_collided.bind(node))
+	node.while_overlapping.connect(tile_collided.bind(node))
 	tile_added.emit(node)
 
 func _on_tiles_child_exiting_tree(node:Node) -> void:

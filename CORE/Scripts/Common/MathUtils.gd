@@ -1,18 +1,15 @@
-extends Node
-
-
-
+class_name MathUtils
 
 # Rectangle utilities.
 # --------------------
-func is_overlapping(pos_a:Vector2, size_a:Vector2, pos_b:Vector2, size_b:Vector2) -> bool: ## Returns true if the boxes are overlapping.
+static func is_overlapping(pos_a:Vector2, size_a:Vector2, pos_b:Vector2, size_b:Vector2) -> bool: ## Returns true if the boxes are overlapping.
 	return (
 		abs(pos_a.x - pos_b.x) * 2 < (size_a.x + size_b.x) and
 		abs(pos_a.y - pos_b.y) * 2 < (size_a.y + size_b.y)
 	)
 
 
-func get_separation_vector(pos_a, size_a, pos_b, size_b):
+static func get_separation_vector(pos_a:Vector2, size_a:Vector2, pos_b:Vector2, size_b:Vector2) -> Vector2:
 	var dx = (pos_b.x - pos_a.x)
 	var px = (size_a.x + size_b.x)/2 - abs(dx)
 
@@ -25,5 +22,5 @@ func get_separation_vector(pos_a, size_a, pos_b, size_b):
 		return Vector2(0, sign(dy) * py)
 
 
-func resolve_inelastic_bounce(first_velocity:float, second_velocity:float, first_mass:float, second_mass:float, elasticity:float) -> float:
-	return ((first_mass - elasticity * second_mass) * first_velocity + (1 + elasticity) * second_mass * second_velocity) / (first_mass + second_mass)
+static func resolve_solid_collision(first_velocity:float, second_velocity:float, first_mass:float, second_mass:float) -> float:
+	return ((first_mass * second_mass) * first_velocity * second_mass * second_velocity) / (first_mass + second_mass)

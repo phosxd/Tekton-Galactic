@@ -16,11 +16,11 @@ func process_grids() -> void:
 		child.position += child.velocity
 
 
-func apply_gravity_on_grids() -> void: # Calculates accurate gravitational force for every grid.
+func apply_gravity_on_grids() -> void: # Calculates gravitational force for every grid.
 	for first:TileGrid in $Grids.get_children():
 		for second:TileGrid in $Grids.get_children():
 			if first == second: continue
-			var direction := (second.center_of_mass-second.position) - (first.center_of_mass-first.position)
+			var direction:Vector2 = second.get_center() - first.get_center()
 			var distance_squared := (direction.x**2 + direction.y**2)
 			var distance = sqrt(distance_squared)
 			if distance < 10: continue
