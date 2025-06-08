@@ -22,5 +22,7 @@ static func get_separation_vector(pos_a:Vector2, size_a:Vector2, pos_b:Vector2, 
 		return Vector2(0, sign(dy) * py)
 
 
-static func resolve_solid_collision(first_velocity:float, second_velocity:float, first_mass:float, second_mass:float) -> float:
-	return ((first_mass * second_mass) * first_velocity * second_mass * second_velocity) / (first_mass + second_mass)
+static func resolve_collision(first_velocity:float, second_velocity:float, first_mass:float, second_mass:float) -> float: ## Resolves 1D collision between 2 objects. Returns new velocity.
+	#return first_velocity
+	var result:float = first_velocity - ((first_velocity-second_velocity) / (first_mass*second_mass))
+	return result

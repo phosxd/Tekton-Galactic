@@ -1,5 +1,6 @@
 class_name TileGrid extends Node2D
 @export var velocity := Vector2(0,0)
+var last_velocity := velocity
 var mass:float = 0.0
 var center_of_mass := Vector2(0,0)
 
@@ -11,11 +12,15 @@ func _ready() -> void:
 	_calculate_mass()
 
 
+func _process(_delta:float) -> void:
+	last_velocity = velocity
+
+
 
 # Utility.
 # --------
 func get_center() -> Vector2: ## Gets center of the Grid, based on center of mass.
-	return self.center_of_mass-self.position
+	return self.center_of_mass + self.position
 
 
 # Internal Utility.
@@ -40,9 +45,8 @@ func tile_collided(first:TileGridTile, second:TileGridTile) -> void:
 	var second_grid = second.get_grid()
 	if not first_grid || not second_grid: return
 	if first_grid == second_grid: return
-	first_grid.velocity.x = MathUtils.resolve_solid_collision(first_grid.velocity.x, second_grid.velocity.x, first_grid.mass, second_grid.mass)
-	first_grid.velocity.y = MathUtils.resolve_solid_collision(first_grid.velocity.y, second_grid.velocity.y, first_grid.mass, second_grid.mass)
-
+	first_grid.velocity.x = MathUtils.resolve_collision(first_grid.last_velocity.x, second_grid.last_velocity.x, first_grid.mass, second_grid.mass)
+	first_grid.velocity.y = MathUtils.resolve_collision(first_grid.last_velocity.y, second_grid.last_velocity.y, first_grid.mass, second_grid.mass)
 
 
 
