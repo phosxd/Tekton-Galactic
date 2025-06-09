@@ -52,23 +52,18 @@ position = Vector2(-8, 10)
 [node name="Tile4" parent="Grids/grid 5/Tiles" index="11" instance=ExtResource("3_b6ypn")]
 position = Vector2(-18, 10)
 
-[node name="Camera2D" type="Camera2D" parent="Grids/grid 5"]
-position = Vector2(-11, 10)
-zoom = Vector2(0.7, 0.7)
-metadata/_edit_lock_ = true
-
 [node name="grid 2" parent="Grids" instance=ExtResource("2_arlre")]
-position = Vector2(-246, -72)
-velocity = Vector2(0.2, 0)
-
-[node name="Tiles" parent="Grids/grid 2" index="0"]
-metadata/_edit_lock_ = true
+position = Vector2(284, -78)
+velocity = Vector2(-1, 0)
 
 [node name="Tile" parent="Grids/grid 2/Tiles" index="0" instance=ExtResource("3_b6ypn")]
-metadata/_edit_lock_ = true
 
 [node name="Texture" parent="Grids/grid 2/Tiles/Tile" index="1"]
 modulate = Color(0, 0, 0, 1)
+
+[node name="Camera2D" type="Camera2D" parent="Grids/grid 2"]
+position = Vector2(45, 69)
+zoom = Vector2(0.7, 0.7)
 
 [node name="Player" type="CharacterBody2D" parent="."]
 unique_name_in_owner = true

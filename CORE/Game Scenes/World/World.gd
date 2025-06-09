@@ -1,5 +1,5 @@
 extends Node2D
-const G := 1 #6.67*pow(10,-11)
+const G:float = 0#0.005 #6.67*pow(10,-11)
 
 
 func _process(_delta:float) -> void:
@@ -13,7 +13,7 @@ func process_grids() -> void:
 		child.position += child.velocity
 		var marker := ColorRect.new()
 		marker.color = Color(1, 1, 1, 0.05)
-		marker.size = Vector2(10, 10)
+		marker.size = Vector2(5, 5)
 		marker.position = child.get_center()
 		self.get_tree().create_timer(4000).timeout.connect(func() -> void:
 			marker.queue_free()
