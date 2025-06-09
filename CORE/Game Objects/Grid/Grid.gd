@@ -23,6 +23,15 @@ func get_center() -> Vector2: ## Gets center of the Grid, based on center of mas
 	return self.center_of_mass + self.position
 
 
+func is_overlapping(grid:TileGrid) -> bool:
+	for child in $Tiles.get_children():
+		if child is not TileGridTile: continue
+		for area in child.colliding_with:
+			if area.get_grid() == grid: return true
+	return false
+
+
+
 # Internal Utility.
 # -----------------
 func _calculate_mass() -> void:
@@ -41,17 +50,14 @@ func _calculate_mass() -> void:
 
 
 func tile_collided(second:TileGridTile, first:TileGridTile) -> void:
-	var first_grid = first.get_grid()
-	var second_grid = second.get_grid()
+	var first_grid:TileGrid = first.get_grid()
+	var second_grid:TileGrid = second.get_grid()
 	if not first_grid || not second_grid: return
 	if first_grid == second_grid: return
 	second.dont_collide_with_this_frame.append(first)
-	var results_x:Vector2 = MathUtils.transfer_momentum(first_grid.last_velocity.x, second_grid.last_velocity.x, first_grid.mass, second_grid.mass)
-	var results_y:Vector2 = MathUtils.transfer_momentum(first_grid.last_velocity.y, second_grid.last_velocity.y, first_grid.mass, second_grid.mass)
-	var direction:Vector2 = ((first.Shape.get_rect().get_center()+first.position) - (second.Shape.get_rect().get_center()+second.position))
-	var separation_vector:Vector2 = Vector2(direction.normalized()/500)
-	first_grid.position -= separation_vector
-	second_grid.position += separation_vector
+	var total_elasticity:float = (first.elasticity+second.elasticity) / 2.0
+	var results_x:Vector2 = MathUtils.transfer_momentum(first_grid.last_velocity.x, second_grid.last_velocity.x, first_grid.mass, second_grid.mass, total_elasticity)
+	var results_y:Vector2 = MathUtils.transfer_momentum(first_grid.last_velocity.y, second_grid.last_velocity.y, first_grid.mass, second_grid.mass, total_elasticity)
 	first_grid.velocity = Vector2(results_x.x, results_y.x)
 	second_grid.velocity = Vector2(results_x.y, results_y.y)
 	
