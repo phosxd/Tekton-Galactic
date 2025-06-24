@@ -1,11 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://bog44y2rup3dc"]
+[gd_scene load_steps=3 format=3 uid="uid://bog44y2rup3dc"]
 
 [ext_resource type="Script" uid="uid://0muno1y4b0r8" path="res://CORE/Game Objects/Grid/Grid.gd" id="1_2g84l"]
 
-[node name="Grid" type="Node2D"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vmm7n"]
+
+[node name="Grid" type="RigidBody2D"]
+physics_material_override = SubResource("PhysicsMaterial_vmm7n")
+gravity_scale = 0.0
+center_of_mass_mode = 1
+can_sleep = false
+continuous_cd = 2
+contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_2g84l")
 
-[node name="Tiles" type="Node2D" parent="."]
-
-[connection signal="child_entered_tree" from="Tiles" to="." method="_on_tiles_child_entered_tree"]
-[connection signal="child_exiting_tree" from="Tiles" to="." method="_on_tiles_child_exiting_tree"]
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]

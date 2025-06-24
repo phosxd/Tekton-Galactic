@@ -3,23 +3,16 @@
 [ext_resource type="Script" uid="uid://c2c4dgtw1ksub" path="res://CORE/Game Objects/Tile/Tile.gd" id="1_gbypl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mi0vr"]
-size = Vector2(10, 10)
+size = Vector2(1, 1)
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_gbypl"]
-size = Vector2(10, 10)
 
-[node name="Tile" type="Area2D"]
-script = ExtResource("1_gbypl")
-
-[node name="Collision Shape" type="CollisionShape2D" parent="."]
-unique_name_in_owner = true
+[node name="Tile" type="CollisionShape2D"]
 shape = SubResource("RectangleShape2D_mi0vr")
+script = ExtResource("1_gbypl")
 metadata/_edit_lock_ = true
 
 [node name="Texture" type="Sprite2D" parent="."]
 unique_name_in_owner = true
 texture = SubResource("PlaceholderTexture2D_gbypl")
 metadata/_edit_lock_ = true
-
-[connection signal="area_entered" from="." to="." method="_on_area_entered"]
-[connection signal="area_exited" from="." to="." method="_on_area_exited"]

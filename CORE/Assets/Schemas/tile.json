@@ -1,0 +1,12 @@
+{
+	"HEADER": {
+		"type": ">header",
+	},
+	"DETAILS": {
+		"type": ">tile_details",
+	},
+	"COMPONENTS": {
+		"type": "dict",
+		"default": {},
+	},
+}

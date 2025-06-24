@@ -1,426 +1,48 @@
-[gd_scene load_steps=6 format=3 uid="uid://dpkf6aatw6to7"]
+[gd_scene load_steps=3 format=3 uid="uid://dpkf6aatw6to7"]
 
 [ext_resource type="Script" uid="uid://co5oka26arqpw" path="res://CORE/Game Scenes/World/World.gd" id="1_g6luc"]
-[ext_resource type="PackedScene" uid="uid://bog44y2rup3dc" path="res://CORE/Game Objects/Grid/Grid.tscn" id="2_arlre"]
-[ext_resource type="PackedScene" uid="uid://dfad4d28ia0md" path="res://CORE/Game Objects/Tile/Tile.tscn" id="3_b6ypn"]
-[ext_resource type="Script" uid="uid://mexhxp6snnac" path="res://CORE/Game Objects/Entity/Player/Player.gd" id="4_arlre"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_b6ypn"]
-size = Vector2(20, 32)
+[ext_resource type="Script" uid="uid://ckp6xp6sqsm2e" path="res://CORE/Scripts/TileGridGenerator_square.gd" id="2_fj2j1"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_g6luc")
 
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(5, 5)
+
 [node name="Grids" type="Node2D" parent="."]
 
-[node name="grid 6" parent="Grids" instance=ExtResource("2_arlre")]
-position = Vector2(99, 5)
-velocity = Vector2(-0.23, -0.07)
-
-[node name="Tile2" parent="Grids/grid 6/Tiles" index="0" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, 20)
-
-[node name="Tile14" parent="Grids/grid 6/Tiles" index="1" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, 30)
-
-[node name="Tile15" parent="Grids/grid 6/Tiles" index="2" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 30)
-
-[node name="Tile16" parent="Grids/grid 6/Tiles" index="3" instance=ExtResource("3_b6ypn")]
-position = Vector2(-38, 10)
-
-[node name="Tile17" parent="Grids/grid 6/Tiles" index="4" instance=ExtResource("3_b6ypn")]
-position = Vector2(12, 10)
-
-[node name="Tile25" parent="Grids/grid 6/Tiles" index="5" instance=ExtResource("3_b6ypn")]
-position = Vector2(12, 0)
-
-[node name="Tile18" parent="Grids/grid 6/Tiles" index="6" instance=ExtResource("3_b6ypn")]
-position = Vector2(2, -10)
-
-[node name="Tile19" parent="Grids/grid 6/Tiles" index="7" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, -10)
-
-[node name="Tile20" parent="Grids/grid 6/Tiles" index="8" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, -10)
-
-[node name="Tile21" parent="Grids/grid 6/Tiles" index="9" instance=ExtResource("3_b6ypn")]
-position = Vector2(-28, -10)
-
-[node name="Tile22" parent="Grids/grid 6/Tiles" index="10" instance=ExtResource("3_b6ypn")]
-position = Vector2(-38, 0)
-
-[node name="Tile23" parent="Grids/grid 6/Tiles" index="11" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, -20)
-
-[node name="Tile24" parent="Grids/grid 6/Tiles" index="12" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, -20)
-
-[node name="Tile8" parent="Grids/grid 6/Tiles" index="13" instance=ExtResource("3_b6ypn")]
-position = Vector2(2, 20)
-
-[node name="Tile9" parent="Grids/grid 6/Tiles" index="14" instance=ExtResource("3_b6ypn")]
-position = Vector2(2, 10)
-
-[node name="Tile6" parent="Grids/grid 6/Tiles" index="15" instance=ExtResource("3_b6ypn")]
-position = Vector2(-28, 20)
-
-[node name="Tile7" parent="Grids/grid 6/Tiles" index="16" instance=ExtResource("3_b6ypn")]
-position = Vector2(-28, 10)
-
-[node name="Tile10" parent="Grids/grid 6/Tiles" index="17" instance=ExtResource("3_b6ypn")]
-position = Vector2(-28, 0)
-
-[node name="Tile11" parent="Grids/grid 6/Tiles" index="18" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 0)
-
-[node name="Tile12" parent="Grids/grid 6/Tiles" index="19" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, 0)
-
-[node name="Tile13" parent="Grids/grid 6/Tiles" index="20" instance=ExtResource("3_b6ypn")]
-position = Vector2(2, 0)
-
-[node name="Tile3" parent="Grids/grid 6/Tiles" index="21" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 20)
-
-[node name="Tile5" parent="Grids/grid 6/Tiles" index="22" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, 10)
-
-[node name="Tile4" parent="Grids/grid 6/Tiles" index="23" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 10)
-
-[node name="grid 8" parent="Grids" instance=ExtResource("2_arlre")]
-position = Vector2(-35, -27)
-velocity = Vector2(0, -0.1)
-
-[node name="Tile2" parent="Grids/grid 8/Tiles" index="0" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, 20)
-
-[node name="Tile14" parent="Grids/grid 8/Tiles" index="1" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, 30)
-
-[node name="Tile15" parent="Grids/grid 8/Tiles" index="2" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 30)
-
-[node name="Tile26" parent="Grids/grid 8/Tiles" index="3" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 40)
-
-[node name="Tile27" parent="Grids/grid 8/Tiles" index="4" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 51)
-
-[node name="Tile28" parent="Grids/grid 8/Tiles" index="5" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 61)
-
-[node name="Tile29" parent="Grids/grid 8/Tiles" index="6" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 72)
-
-[node name="Tile30" parent="Grids/grid 8/Tiles" index="7" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 83)
-
-[node name="Tile31" parent="Grids/grid 8/Tiles" index="8" instance=ExtResource("3_b6ypn")]
-position = Vector2(-7, 83)
-
-[node name="Tile32" parent="Grids/grid 8/Tiles" index="9" instance=ExtResource("3_b6ypn")]
-position = Vector2(4, 83)
-
-[node name="Tile33" parent="Grids/grid 8/Tiles" index="10" instance=ExtResource("3_b6ypn")]
-position = Vector2(15, 83)
-
-[node name="Tile34" parent="Grids/grid 8/Tiles" index="11" instance=ExtResource("3_b6ypn")]
-position = Vector2(26, 83)
-
-[node name="Tile35" parent="Grids/grid 8/Tiles" index="12" instance=ExtResource("3_b6ypn")]
-position = Vector2(37, 83)
-
-[node name="Tile36" parent="Grids/grid 8/Tiles" index="13" instance=ExtResource("3_b6ypn")]
-position = Vector2(47, 83)
-
-[node name="Tile37" parent="Grids/grid 8/Tiles" index="14" instance=ExtResource("3_b6ypn")]
-position = Vector2(58, 83)
-
-[node name="Tile38" parent="Grids/grid 8/Tiles" index="15" instance=ExtResource("3_b6ypn")]
-position = Vector2(58, 73)
-
-[node name="Tile16" parent="Grids/grid 8/Tiles" index="16" instance=ExtResource("3_b6ypn")]
-position = Vector2(-38, 10)
-
-[node name="Tile17" parent="Grids/grid 8/Tiles" index="17" instance=ExtResource("3_b6ypn")]
-position = Vector2(12, 10)
-
-[node name="Tile25" parent="Grids/grid 8/Tiles" index="18" instance=ExtResource("3_b6ypn")]
-position = Vector2(12, 0)
-
-[node name="Tile18" parent="Grids/grid 8/Tiles" index="19" instance=ExtResource("3_b6ypn")]
-position = Vector2(2, -10)
-
-[node name="Tile19" parent="Grids/grid 8/Tiles" index="20" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, -10)
-
-[node name="Tile20" parent="Grids/grid 8/Tiles" index="21" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, -10)
-
-[node name="Tile21" parent="Grids/grid 8/Tiles" index="22" instance=ExtResource("3_b6ypn")]
-position = Vector2(-28, -10)
-
-[node name="Tile22" parent="Grids/grid 8/Tiles" index="23" instance=ExtResource("3_b6ypn")]
-position = Vector2(-38, 0)
-
-[node name="Tile23" parent="Grids/grid 8/Tiles" index="24" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, -20)
-
-[node name="Tile24" parent="Grids/grid 8/Tiles" index="25" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, -20)
-
-[node name="Tile8" parent="Grids/grid 8/Tiles" index="26" instance=ExtResource("3_b6ypn")]
-position = Vector2(2, 20)
-
-[node name="Tile9" parent="Grids/grid 8/Tiles" index="27" instance=ExtResource("3_b6ypn")]
-position = Vector2(2, 10)
-
-[node name="Tile6" parent="Grids/grid 8/Tiles" index="28" instance=ExtResource("3_b6ypn")]
-position = Vector2(-28, 20)
-
-[node name="Tile7" parent="Grids/grid 8/Tiles" index="29" instance=ExtResource("3_b6ypn")]
-position = Vector2(-28, 10)
-
-[node name="Tile10" parent="Grids/grid 8/Tiles" index="30" instance=ExtResource("3_b6ypn")]
-position = Vector2(-28, 0)
-
-[node name="Tile11" parent="Grids/grid 8/Tiles" index="31" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 0)
-
-[node name="Tile12" parent="Grids/grid 8/Tiles" index="32" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, 0)
-
-[node name="Tile13" parent="Grids/grid 8/Tiles" index="33" instance=ExtResource("3_b6ypn")]
-position = Vector2(2, 0)
-
-[node name="Tile3" parent="Grids/grid 8/Tiles" index="34" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 20)
-
-[node name="Tile5" parent="Grids/grid 8/Tiles" index="35" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, 10)
-
-[node name="Tile4" parent="Grids/grid 8/Tiles" index="36" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 10)
-
-[node name="grid 7" parent="Grids" instance=ExtResource("2_arlre")]
-position = Vector2(99, -134)
-velocity = Vector2(-0.25, 0)
-
-[node name="Tile2" parent="Grids/grid 7/Tiles" index="0" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, 20)
-
-[node name="Tile14" parent="Grids/grid 7/Tiles" index="1" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, 30)
-
-[node name="Tile15" parent="Grids/grid 7/Tiles" index="2" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 30)
-
-[node name="Tile16" parent="Grids/grid 7/Tiles" index="3" instance=ExtResource("3_b6ypn")]
-position = Vector2(-38, 10)
-
-[node name="Tile17" parent="Grids/grid 7/Tiles" index="4" instance=ExtResource("3_b6ypn")]
-position = Vector2(12, 10)
-
-[node name="Tile25" parent="Grids/grid 7/Tiles" index="5" instance=ExtResource("3_b6ypn")]
-position = Vector2(12, 0)
-
-[node name="Tile18" parent="Grids/grid 7/Tiles" index="6" instance=ExtResource("3_b6ypn")]
-position = Vector2(2, -10)
-
-[node name="Tile19" parent="Grids/grid 7/Tiles" index="7" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, -10)
-
-[node name="Tile20" parent="Grids/grid 7/Tiles" index="8" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, -10)
-
-[node name="Tile21" parent="Grids/grid 7/Tiles" index="9" instance=ExtResource("3_b6ypn")]
-position = Vector2(-28, -10)
-
-[node name="Tile22" parent="Grids/grid 7/Tiles" index="10" instance=ExtResource("3_b6ypn")]
-position = Vector2(-38, 0)
-
-[node name="Tile23" parent="Grids/grid 7/Tiles" index="11" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, -20)
-
-[node name="Tile24" parent="Grids/grid 7/Tiles" index="12" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, -20)
-
-[node name="Tile8" parent="Grids/grid 7/Tiles" index="13" instance=ExtResource("3_b6ypn")]
-position = Vector2(2, 20)
-
-[node name="Tile9" parent="Grids/grid 7/Tiles" index="14" instance=ExtResource("3_b6ypn")]
-position = Vector2(2, 10)
-
-[node name="Tile6" parent="Grids/grid 7/Tiles" index="15" instance=ExtResource("3_b6ypn")]
-position = Vector2(-28, 20)
-
-[node name="Tile7" parent="Grids/grid 7/Tiles" index="16" instance=ExtResource("3_b6ypn")]
-position = Vector2(-28, 10)
-
-[node name="Tile10" parent="Grids/grid 7/Tiles" index="17" instance=ExtResource("3_b6ypn")]
-position = Vector2(-28, 0)
-
-[node name="Tile11" parent="Grids/grid 7/Tiles" index="18" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 0)
-
-[node name="Tile12" parent="Grids/grid 7/Tiles" index="19" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, 0)
-
-[node name="Tile13" parent="Grids/grid 7/Tiles" index="20" instance=ExtResource("3_b6ypn")]
-position = Vector2(2, 0)
-
-[node name="Tile3" parent="Grids/grid 7/Tiles" index="21" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 20)
-
-[node name="Tile5" parent="Grids/grid 7/Tiles" index="22" instance=ExtResource("3_b6ypn")]
-position = Vector2(-8, 10)
-
-[node name="Tile4" parent="Grids/grid 7/Tiles" index="23" instance=ExtResource("3_b6ypn")]
-position = Vector2(-18, 10)
-
-[node name="Camera2D" type="Camera2D" parent="Grids/grid 7"]
-position = Vector2(21, 65)
-metadata/_edit_lock_ = true
-
-[node name="grid 2" parent="Grids" instance=ExtResource("2_arlre")]
-position = Vector2(-246, -135)
-velocity = Vector2(0.5, 0)
-
-[node name="Tiles" parent="Grids/grid 2" index="0"]
-metadata/_edit_lock_ = true
-
-[node name="Tile" parent="Grids/grid 2/Tiles" index="0" instance=ExtResource("3_b6ypn")]
-metadata/_edit_lock_ = true
-
-[node name="Texture" parent="Grids/grid 2/Tiles/Tile" index="1"]
-modulate = Color(0, 0, 0, 1)
-
-[node name="grid 3" parent="Grids" instance=ExtResource("2_arlre")]
-position = Vector2(-16, 35)
-
-[node name="Tiles" parent="Grids/grid 3" index="0"]
-metadata/_edit_lock_ = true
-
-[node name="Tile" parent="Grids/grid 3/Tiles" index="0" instance=ExtResource("3_b6ypn")]
-position = Vector2(10, -32)
-
-[node name="Tile2" parent="Grids/grid 3/Tiles" index="1" instance=ExtResource("3_b6ypn")]
-position = Vector2(10, 0)
-
-[node name="Tile4" parent="Grids/grid 3/Tiles" index="2" instance=ExtResource("3_b6ypn")]
-position = Vector2(10, -11)
-
-[node name="Tile3" parent="Grids/grid 3/Tiles" index="3" instance=ExtResource("3_b6ypn")]
-position = Vector2(10, -22)
-
-[node name="Player" type="CharacterBody2D" parent="."]
-unique_name_in_owner = true
-position = Vector2(44, -54)
-script = ExtResource("4_arlre")
-
-[node name="ColorRect" type="ColorRect" parent="Player"]
-offset_left = -10.0
-offset_top = -16.0
-offset_right = 10.0
-offset_bottom = 16.0
-
-[node name="Collider" type="CollisionShape2D" parent="Player"]
-shape = SubResource("RectangleShape2D_b6ypn")
-
-[editable path="Grids/grid 6"]
-[editable path="Grids/grid 6/Tiles/Tile2"]
-[editable path="Grids/grid 6/Tiles/Tile14"]
-[editable path="Grids/grid 6/Tiles/Tile15"]
-[editable path="Grids/grid 6/Tiles/Tile16"]
-[editable path="Grids/grid 6/Tiles/Tile17"]
-[editable path="Grids/grid 6/Tiles/Tile25"]
-[editable path="Grids/grid 6/Tiles/Tile18"]
-[editable path="Grids/grid 6/Tiles/Tile19"]
-[editable path="Grids/grid 6/Tiles/Tile20"]
-[editable path="Grids/grid 6/Tiles/Tile21"]
-[editable path="Grids/grid 6/Tiles/Tile22"]
-[editable path="Grids/grid 6/Tiles/Tile23"]
-[editable path="Grids/grid 6/Tiles/Tile24"]
-[editable path="Grids/grid 6/Tiles/Tile8"]
-[editable path="Grids/grid 6/Tiles/Tile9"]
-[editable path="Grids/grid 6/Tiles/Tile6"]
-[editable path="Grids/grid 6/Tiles/Tile7"]
-[editable path="Grids/grid 6/Tiles/Tile10"]
-[editable path="Grids/grid 6/Tiles/Tile11"]
-[editable path="Grids/grid 6/Tiles/Tile12"]
-[editable path="Grids/grid 6/Tiles/Tile13"]
-[editable path="Grids/grid 6/Tiles/Tile3"]
-[editable path="Grids/grid 6/Tiles/Tile5"]
-[editable path="Grids/grid 6/Tiles/Tile4"]
-[editable path="Grids/grid 8"]
-[editable path="Grids/grid 8/Tiles/Tile2"]
-[editable path="Grids/grid 8/Tiles/Tile14"]
-[editable path="Grids/grid 8/Tiles/Tile15"]
-[editable path="Grids/grid 8/Tiles/Tile26"]
-[editable path="Grids/grid 8/Tiles/Tile27"]
-[editable path="Grids/grid 8/Tiles/Tile28"]
-[editable path="Grids/grid 8/Tiles/Tile29"]
-[editable path="Grids/grid 8/Tiles/Tile30"]
-[editable path="Grids/grid 8/Tiles/Tile31"]
-[editable path="Grids/grid 8/Tiles/Tile32"]
-[editable path="Grids/grid 8/Tiles/Tile33"]
-[editable path="Grids/grid 8/Tiles/Tile34"]
-[editable path="Grids/grid 8/Tiles/Tile35"]
-[editable path="Grids/grid 8/Tiles/Tile36"]
-[editable path="Grids/grid 8/Tiles/Tile37"]
-[editable path="Grids/grid 8/Tiles/Tile38"]
-[editable path="Grids/grid 8/Tiles/Tile16"]
-[editable path="Grids/grid 8/Tiles/Tile17"]
-[editable path="Grids/grid 8/Tiles/Tile25"]
-[editable path="Grids/grid 8/Tiles/Tile18"]
-[editable path="Grids/grid 8/Tiles/Tile19"]
-[editable path="Grids/grid 8/Tiles/Tile20"]
-[editable path="Grids/grid 8/Tiles/Tile21"]
-[editable path="Grids/grid 8/Tiles/Tile22"]
-[editable path="Grids/grid 8/Tiles/Tile23"]
-[editable path="Grids/grid 8/Tiles/Tile24"]
-[editable path="Grids/grid 8/Tiles/Tile8"]
-[editable path="Grids/grid 8/Tiles/Tile9"]
-[editable path="Grids/grid 8/Tiles/Tile6"]
-[editable path="Grids/grid 8/Tiles/Tile7"]
-[editable path="Grids/grid 8/Tiles/Tile10"]
-[editable path="Grids/grid 8/Tiles/Tile11"]
-[editable path="Grids/grid 8/Tiles/Tile12"]
-[editable path="Grids/grid 8/Tiles/Tile13"]
-[editable path="Grids/grid 8/Tiles/Tile3"]
-[editable path="Grids/grid 8/Tiles/Tile5"]
-[editable path="Grids/grid 8/Tiles/Tile4"]
-[editable path="Grids/grid 7"]
-[editable path="Grids/grid 7/Tiles/Tile2"]
-[editable path="Grids/grid 7/Tiles/Tile14"]
-[editable path="Grids/grid 7/Tiles/Tile15"]
-[editable path="Grids/grid 7/Tiles/Tile16"]
-[editable path="Grids/grid 7/Tiles/Tile17"]
-[editable path="Grids/grid 7/Tiles/Tile25"]
-[editable path="Grids/grid 7/Tiles/Tile18"]
-[editable path="Grids/grid 7/Tiles/Tile19"]
-[editable path="Grids/grid 7/Tiles/Tile20"]
-[editable path="Grids/grid 7/Tiles/Tile21"]
-[editable path="Grids/grid 7/Tiles/Tile22"]
-[editable path="Grids/grid 7/Tiles/Tile23"]
-[editable path="Grids/grid 7/Tiles/Tile24"]
-[editable path="Grids/grid 7/Tiles/Tile8"]
-[editable path="Grids/grid 7/Tiles/Tile9"]
-[editable path="Grids/grid 7/Tiles/Tile6"]
-[editable path="Grids/grid 7/Tiles/Tile7"]
-[editable path="Grids/grid 7/Tiles/Tile10"]
-[editable path="Grids/grid 7/Tiles/Tile11"]
-[editable path="Grids/grid 7/Tiles/Tile12"]
-[editable path="Grids/grid 7/Tiles/Tile13"]
-[editable path="Grids/grid 7/Tiles/Tile3"]
-[editable path="Grids/grid 7/Tiles/Tile5"]
-[editable path="Grids/grid 7/Tiles/Tile4"]
-[editable path="Grids/grid 2"]
-[editable path="Grids/grid 2/Tiles/Tile"]
-[editable path="Grids/grid 3"]
-[editable path="Grids/grid 3/Tiles/Tile"]
-[editable path="Grids/grid 3/Tiles/Tile2"]
-[editable path="Grids/grid 3/Tiles/Tile4"]
-[editable path="Grids/grid 3/Tiles/Tile3"]
+[node name="square2" type="Node2D" parent="Grids"]
+position = Vector2(-2, -24)
+script = ExtResource("2_fj2j1")
+radius = 2
+tile = &"stone"
+metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
+
+[node name="square6" type="Node2D" parent="Grids"]
+position = Vector2(102, -29)
+script = ExtResource("2_fj2j1")
+radius = 4
+tile = &"stone"
+linear_velocity = Vector2(-30, 8)
+metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
+
+[node name="square3" type="Node2D" parent="Grids"]
+position = Vector2(-21, -3)
+script = ExtResource("2_fj2j1")
+radius = 5
+tile = &"stone"
+metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
+
+[node name="square4" type="Node2D" parent="Grids"]
+position = Vector2(12, 21)
+script = ExtResource("2_fj2j1")
+radius = 5
+tile = &"stone"
+metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
+
+[node name="square5" type="Node2D" parent="Grids"]
+position = Vector2(-11, 23)
+script = ExtResource("2_fj2j1")
+radius = 10
+tile = &"stone"
+metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"

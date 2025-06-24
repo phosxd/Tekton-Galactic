@@ -1,11 +1,12 @@
-class_name TileGrid extends Node2D
-@export var velocity := Vector2(0,0)
-var last_velocity := velocity
-var mass:float = 0.0
-var center_of_mass := Vector2(0,0)
+class_name TileGrid extends RigidBody2D
+const scene = preload('res://CORE/Game Objects/Grid/Grid.tscn')
 
 signal tile_added(tile:TileGridTile)
 signal tile_removed(tile:TileGridTile)
+
+
+static func construct() -> TileGrid:
+	return scene.instantiate()
 
 
 func _ready() -> void:
@@ -13,7 +14,7 @@ func _ready() -> void:
 
 
 func _process(_delta:float) -> void:
-	last_velocity = velocity
+	pass
 
 
 
@@ -23,12 +24,26 @@ func get_center() -> Vector2: ## Gets center of the Grid, based on center of mas
 	return self.center_of_mass + self.position
 
 
-func is_overlapping(grid:TileGrid) -> bool:
-	for child in $Tiles.get_children():
-		if child is not TileGridTile: continue
-		for area in child.colliding_with:
-			if area.get_grid() == grid: return true
-	return false
+func add_tile(tile:TileGridTile) -> void: ## Adds the given tile to the grid, and recalculates grid mass.
+	self.add_child(tile)
+	_calculate_mass()
+
+
+func add_tiles(tiles:Array[TileGridTile]) -> void: ## Adds the given tiles to the grid, and recalculates grid mass. More efficient for adding multiple tiles at once.
+	for tile:TileGridTile in tiles:
+		self.add_child(tile)
+	_calculate_mass()
+
+
+func destroy_tile(tile:TileGridTile) -> void: ## Destroys the given tile and recalculates grid mass.
+	if tile.get_grid() != self: return # Does nothing if not a part of the same grid.
+	tile.free()
+	var tile_count:int = 0
+	for child in self.get_children():
+		if child is TileGridTile: tile_count += 1
+	if tile_count == 0: self.queue_free()
+	_calculate_mass()
+
 
 
 
@@ -37,40 +52,38 @@ func is_overlapping(grid:TileGrid) -> bool:
 func _calculate_mass() -> void:
 	var total_position := Vector2(0,0)
 	var total_mass:float = 0
-	var count := 0
-	for child in $Tiles.get_children():
+	var count:int = 0
+	for child in self.get_children():
 		if child is not TileGridTile: continue
 		total_position += child.position
 		total_mass += child.mass
 		count += 1
-	center_of_mass = total_position/count
-	mass = total_mass
+	self.center_of_mass = total_position/count
+	self.mass = total_mass
 
 
+func _tile_area_entered(second:TileGridTile, first:TileGridTile) -> void:
+	if [first,second] in PhysicsManager.Colliding_area_pairs: return
+	if [second,first] in PhysicsManager.Colliding_area_pairs: return
 
-
-func tile_collided(second:TileGridTile, first:TileGridTile) -> void:
 	var first_grid:TileGrid = first.get_grid()
 	var second_grid:TileGrid = second.get_grid()
 	if not first_grid || not second_grid: return
 	if first_grid == second_grid: return
-	second.dont_collide_with_this_frame.append(first)
+
+	# Apply physics.
 	var total_elasticity:float = (first.elasticity+second.elasticity) / 2.0
 	var results_x:Vector2 = MathUtils.transfer_momentum(first_grid.last_velocity.x, second_grid.last_velocity.x, first_grid.mass, second_grid.mass, total_elasticity)
 	var results_y:Vector2 = MathUtils.transfer_momentum(first_grid.last_velocity.y, second_grid.last_velocity.y, first_grid.mass, second_grid.mass, total_elasticity)
 	first_grid.velocity = Vector2(results_x.x, results_y.x)
 	second_grid.velocity = Vector2(results_x.y, results_y.y)
-	
 
 
 
-func _on_tiles_child_entered_tree(node:Node) -> void:
-	if node is not TileGridTile: return
-	_calculate_mass()
-	node.while_overlapping.connect(tile_collided.bind(node))
-	tile_added.emit(node)
 
-func _on_tiles_child_exiting_tree(node:Node) -> void:
-	if node is not TileGridTile: return
-	_calculate_mass()
-	tile_removed.emit(node)
+func _on_body_shape_entered(body_rid:RID, body:Node, body_shape_index:int, local_shape_index:int) -> void:
+	if self.get_child_count()-1 < local_shape_index: return
+	var tile:TileGridTile = self.get_child(local_shape_index)
+	var total_energy = abs((body.linear_velocity.x+body.linear_velocity.y) - (self.linear_velocity.x+self.linear_velocity.y)) /2
+	if total_energy > tile.mass:
+		self.destroy_tile.call_deferred((tile))

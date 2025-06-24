@@ -1,0 +1,24 @@
+{
+	"name": {
+		"type": "string",
+		"range": [4,20],
+		"regex": "[[:alnum:]]+",
+		"default": "Placeholder"
+	},
+	"health": {
+		"type": "int",
+		"range": [0,100],
+		"default": 100
+	},
+	"inventory": {
+		"type": "array",
+		"range": null,
+		"element_types": [">item"],
+		"default": []
+	},
+	"date_joined": {
+		"type": "string",
+		"format": "date_yyyy_mm_dd",
+		"default": "none",
+	},
+}
