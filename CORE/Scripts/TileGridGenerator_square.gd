@@ -1,7 +1,7 @@
 class_name TileGridGenerator_circle extends Node2D
 
 @export var radius:int = 1
-@export var tile:StringName
+@export var tile_id:StringName
 @export var linear_velocity:Vector2
 
 
@@ -25,7 +25,7 @@ func _ready() -> void:
 
 
 func _make_tile(position:Vector2) -> TileGridTile:
-	SandboxManager.get_tile(tile)
-	var tile := TileGridTile.construct()
+	var tile_data = SandboxManager.get_tile(tile_id).data
+	var tile := TileGridTile.construct(tile_data)
 	tile.position = position
 	return tile

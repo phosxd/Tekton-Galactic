@@ -1,6 +1,6 @@
 {
 	"type": {
-		"type": "srtring",
+		"type": "string",
 		"enum": ["tile", "entity", "item"],
 		"default": "none",
 	},

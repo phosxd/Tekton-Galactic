@@ -7,7 +7,8 @@
 script = ExtResource("1_g6luc")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(5, 5)
+position = Vector2(1, 1)
+zoom = Vector2(7.5, 7.5)
 
 [node name="Grids" type="Node2D" parent="."]
 
@@ -15,34 +16,41 @@ zoom = Vector2(5, 5)
 position = Vector2(-2, -24)
 script = ExtResource("2_fj2j1")
 radius = 2
-tile = &"stone"
+tile_id = &"core:stone"
 metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
 
 [node name="square6" type="Node2D" parent="Grids"]
 position = Vector2(102, -29)
 script = ExtResource("2_fj2j1")
 radius = 4
-tile = &"stone"
-linear_velocity = Vector2(-30, 8)
+tile_id = &"core:stone"
+linear_velocity = Vector2(-125, 28)
 metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
 
 [node name="square3" type="Node2D" parent="Grids"]
 position = Vector2(-21, -3)
 script = ExtResource("2_fj2j1")
 radius = 5
-tile = &"stone"
+tile_id = &"core:stone"
 metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
 
 [node name="square4" type="Node2D" parent="Grids"]
 position = Vector2(12, 21)
 script = ExtResource("2_fj2j1")
 radius = 5
-tile = &"stone"
+tile_id = &"core:stone"
 metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
 
 [node name="square5" type="Node2D" parent="Grids"]
 position = Vector2(-11, 23)
 script = ExtResource("2_fj2j1")
 radius = 10
-tile = &"stone"
+tile_id = &"core:stone"
+metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
+
+[node name="SUPER SQUARE" type="Node2D" parent="Grids"]
+position = Vector2(6, -7)
+script = ExtResource("2_fj2j1")
+radius = 2
+tile_id = &"core:unobtainium"
 metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"

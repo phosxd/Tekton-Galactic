@@ -7,7 +7,8 @@ func _process(_delta:float) -> void:
 
 
 func process_grids() -> void:
-	apply_gravity_on_grids()
+	return
+	#apply_gravity_on_grids()
 	for child in $Grids.get_children():
 		var marker := ColorRect.new()
 		marker.color = Color(1, 1, 1, 0.05)

@@ -7,6 +7,6 @@
 	"elasticity": {
 		"type": "float",
 		"range": [0, 1],
-		"default": 0
+		"default": 0,
 	},
 }

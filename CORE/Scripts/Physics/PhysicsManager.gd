@@ -1,7 +1,7 @@
 class_name PhysicsManager
 
 
-const Gravity:float = 0.001 ## Gravity constant.
+const Gravity:float = 0.00001 ## Gravity constant.
 static var Colliding_area_pairs:Array[Array] ## All pairs of `Area2D`s that are currently colliding. Used to prevent unexpected duplicated collisions.
 
 

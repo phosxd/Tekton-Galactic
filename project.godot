@@ -19,6 +19,11 @@ boot_splash/bg_color=Color(0.0923971, 0.0923971, 0.092397, 1)
 boot_splash/show_image=false
 config/icon="res://CORE/icon.svg"
 
+[autoload]
+
+Init="*res://CORE/Scripts/Init.gd"
+SandboxManager="*res://CORE/Scripts/SandboxManager.gd"
+
 [debug]
 
 file_logging/enable_file_logging.pc=false
@@ -73,9 +78,15 @@ move_down_dynamic={
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194322,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
+left_click={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(579, 24),"global_position":Vector2(588, 72),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
+]
+}
 
 [physics]
 
+2d/run_on_separate_thread=true
 2d/default_linear_damp=0.0
 2d/default_angular_damp=0.0
 
