@@ -4,9 +4,13 @@
 		"id": "core:player",
 		"version": "indev",
 	},
+	"DEATILS": {
+		"mass": 250,
+	},
 	"COMPONENTS": {
 		"2d_movement": {
-			"speed": 25,
+			"controller": "user",
+			"speed": 0.5,
 		},
-	},
+	}
 }

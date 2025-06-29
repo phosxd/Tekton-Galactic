@@ -5,14 +5,13 @@
 		"version": "indev",
 	},
 	"DETAILS": {
-		"mass": 2500,
-		"integrity": 0,
+		"mass": 4000,
+		"integrity": 1,
 		"elasticity": 0.0,
 	},
 	"COMPONENTS": {
 		"texture": {
 			"variants": ["unobtanium"],
 		},
-		"unbreakable": {},
 	},
 }

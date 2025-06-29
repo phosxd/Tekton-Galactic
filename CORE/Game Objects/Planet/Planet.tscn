@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dso7clk6lrikd"]
+
+[ext_resource type="Script" uid="uid://k3imh6vkdwfh" path="res://CORE/Game Objects/Planet/Planet.gd" id="1_nddjl"]
+
+[node name="Planet" type="StaticBody2D"]
+script = ExtResource("1_nddjl")

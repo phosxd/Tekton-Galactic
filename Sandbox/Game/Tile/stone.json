@@ -6,12 +6,12 @@
 	},
 	"DETAILS": {
 		"mass": 2500,
-		"integrity": 500,
+		"integrity": 1.0,
 		"elasticity": 0.0,
 	},
 	"COMPONENTS": {
 		"texture": {
-			"variants": ["concrete_1", "concrete_2"],
+			"variants": ["stone_1"],
 		},
 	},
 }

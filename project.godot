@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Tekton Galactic"
 config/version="indev"
-run/main_scene="uid://dpkf6aatw6to7"
+run/main_scene="uid://bolad3oot6dtn"
 config/use_hidden_project_data_directory=false
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/bg_color=Color(0.0923971, 0.0923971, 0.092397, 1)
@@ -46,7 +46,6 @@ folder_colors={
 "res://CORE/Game Scenes/": "blue",
 "res://CORE/Scripts/": "red",
 "res://CORE/Scripts/Common/": "red",
-"res://CORE/Scripts/Physics/": "red",
 "res://EXPORT/": "gray",
 "res://Sandbox/": "orange",
 "res://Sandbox/Game/": "purple"
@@ -84,14 +83,20 @@ left_click={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="Main Physics Collision"
+2d_physics/layer_2="Tile Aura"
+
 [physics]
 
-2d/run_on_separate_thread=true
+common/physics_ticks_per_second=40
+common/physics_jitter_fix=1.0
+2d/physics_engine="Rapier2D"
 2d/default_linear_damp=0.0
 2d/default_angular_damp=0.0
 
 [rendering]
 
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"
 shader_compiler/shader_cache/enabled=false
+environment/defaults/default_clear_color=Color(0.0383972, 0.0383972, 0.0383971, 1)

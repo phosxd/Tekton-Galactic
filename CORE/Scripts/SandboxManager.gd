@@ -27,7 +27,6 @@ var entity_components:Dictionary[String,GDScript] = {}
 func _ready() -> void:
 	Placeholder_texture = PlaceholderTexture2D.new()
 	load_sandbox(Sandbox_path)
-	print(get_texture('concrete_1'))
 
 
 
@@ -49,7 +48,7 @@ func load_sandbox(root_path:String) -> void:
 	for filename:String in game_component_directory.get_files():
 		if not filename.ends_with('.gd'): continue
 		var script = load(root_path+'/'+Game_component_path+'/'+filename)
-		self.components[script.resource_name] = script
+		self.components[script.name] = script
 
 	# Load tile components.
 	var game_tile_component_directory = DirAccess.open(root_path+'/'+Game_tile_component_path)
@@ -63,7 +62,7 @@ func load_sandbox(root_path:String) -> void:
 	for filename:String in game_entity_component_directory.get_files():
 		if not filename.ends_with('.gd'): continue
 		var script = load(root_path+'/'+Game_entity_component_path+'/'+filename)
-		self.entity_components[script.resource_name] = script
+		self.entity_components[script.name] = script
 
 
 

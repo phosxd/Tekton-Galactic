@@ -1,0 +1,12 @@
+{
+	"HEADER": {
+		"type": ">header",
+	},
+	"DETAILS": {
+		"type": ">entity_details",
+	},
+	"COMPONENTS": {
+		"type": "dict",
+		"default": {},
+	},
+}

@@ -4,6 +4,11 @@
 		"range": [0.01, 100000],
 		"default": 1,
 	},
+	"integrity": {
+		"type": "float",
+		"range": [0.01, 100000],
+		"default": 1,
+	},
 	"elasticity": {
 		"type": "float",
 		"range": [0, 1],

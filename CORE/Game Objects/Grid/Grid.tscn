@@ -12,7 +12,7 @@ center_of_mass_mode = 1
 can_sleep = false
 continuous_cd = 2
 contact_monitor = true
-max_contacts_reported = 100
+max_contacts_reported = 1000
 script = ExtResource("1_2g84l")
 
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
