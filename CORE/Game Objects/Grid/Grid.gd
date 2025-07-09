@@ -14,10 +14,6 @@ static func construct() -> Grid:
 	return scene.instantiate()
 
 
-func _ready() -> void:
-	pass
-
-
 func _process(_delta:float) -> void:
 	if mouse_hovering && Input.is_action_pressed('left_click'):
 		mouse_dragging = true
@@ -54,7 +50,7 @@ func add_tiles(tiles:Array[Tile]) -> void: ## Adds the given tiles to the grid, 
 func destroy_tile(tile:Tile) -> void: ## Destroys the given tile and recalculates grid mass.
 	if tile.get_grid() != self: return # Does nothing if not a part of the same grid.
 	tile.free()
-	_calculate_mass()
+	_calculate()
 
 
 func disconnect_tile(tile:Tile) -> void: ## Disconnects the given tile and recalculates grid mass.
@@ -65,7 +61,7 @@ func disconnect_tile(tile:Tile) -> void: ## Disconnects the given tile and recal
 	new_grid.add_tile(tile)
 	self.get_parent().add_child(new_grid)
 
-	_calculate_mass()
+	_calculate()
 
 
 
@@ -96,6 +92,8 @@ func _calculate() -> void:
 		var section_grid := Grid.construct()
 		for section_tile:Tile in section:
 			section_grid.add_tile(section_tile)
+		section_grid.linear_velocity = self.linear_velocity
+		section_grid.angular_velocity = self.angular_velocity
 		self.get_parent().add_child(section_grid)
 	
 	# Recalculate mass & destroy Grid if empty.
@@ -115,17 +113,21 @@ func _find_separate_sections() -> Array[Array]:
 		var result := _recursive_tile_search([], child, passed_tiles)
 		passed_tiles = result.passed_tiles
 		if result.new_section.size() > 0: sections.append(result.new_section)
-	print(sections.size())
 
 	return sections
 
 
 func _recursive_tile_search(section:Array, tile:Tile, passed_tiles:Array[Tile]) -> Dictionary:
-	for neighbor:Tile in tile.get_neighbors():
+	section.append(tile)
+	passed_tiles.append(tile)
+	for neighbor in tile.get_neighbors():
+		if not neighbor: continue
+		if neighbor is not Tile: continue
+		if not is_instance_valid(neighbor): continue
 		if passed_tiles.has(neighbor): continue
 		section.append(neighbor)
 		passed_tiles.append(neighbor)
-		_recursive_tile_search(section, tile, passed_tiles)
+		_recursive_tile_search(section, neighbor, passed_tiles)
 
 	return {
 		'new_section': section,
@@ -142,7 +144,6 @@ func _on_body_shape_entered(body_rid:RID, body:Node, body_shape_index:int, local
 	var tile:Tile = self.get_child(local_shape_index)
 	var velocity = (body.get_energy() - self.get_energy())
 	var incoming_energy = abs(0.5 * (velocity))
-	print(incoming_energy)
 	if tile.callback_can_destroy.call(incoming_energy):
 		self.destroy_tile.call_deferred(tile)
 	elif tile.callback_can_disconnect.call(incoming_energy):
@@ -156,3 +157,9 @@ func _on_mouse_entered() -> void:
 func _on_mouse_exited() -> void:
 	mouse_hovering = false
 	if not Input.is_action_pressed('left_click'): mouse_dragging = false
+
+
+func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+	match event.as_text():
+		'Right Mouse Button':
+			self.destroy_tile(self.get_child(shape_idx))

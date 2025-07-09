@@ -1,0 +1,21 @@
+{
+	"HEADER": {
+		"type": "entity",
+		"id": "core:player",
+		"version": "indev",
+	},
+	"DETAILS": {
+		"info": "???",
+		"mass": 250,
+	},
+	"COMPONENTS": {
+		"2d_movement": {
+			"controller": "user",
+			"speed": 300,
+			"rotational_speed": 100,
+		},
+		"collision_shape": {
+			"id": "player",
+		},
+	}
+}

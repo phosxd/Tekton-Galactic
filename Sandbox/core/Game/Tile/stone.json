@@ -1,0 +1,18 @@
+{
+	"HEADER": {
+		"type": "tile",
+		"id": "core:stone",
+		"version": "indev",
+	},
+	"DETAILS": {
+		"info": "It's hard and brittle.",
+		"mass": 2500,
+		"integrity": 1,
+		"elasticity": 0.0,
+	},
+	"COMPONENTS": {
+		"texture": {
+			"variants": ["stone_1"],
+		},
+	},
+}

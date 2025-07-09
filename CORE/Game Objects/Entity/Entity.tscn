@@ -4,9 +4,11 @@
 [ext_resource type="Shape2D" uid="uid://1lbde3tafckg" path="res://CORE/Game Objects/Entity/default_collision_shape.tres" id="2_djbdv"]
 [ext_resource type="Texture2D" uid="uid://dokxg838angch" path="res://CORE/Game Objects/Entity/default_texture.tres" id="3_lateh"]
 
-[node name="Entity" type="CharacterBody2D"]
+[node name="Entity" type="RigidBody2D"]
+center_of_mass_mode = 1
+can_sleep = false
+continuous_cd = 1
 script = ExtResource("1_riwi1")
-metadata/_custom_type_script = "uid://cx2oio5p33enp"
 
 [node name="Collision Shape" type="CollisionShape2D" parent="."]
 unique_name_in_owner = true

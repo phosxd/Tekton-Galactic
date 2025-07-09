@@ -3,6 +3,15 @@ class_name World extends Node2D
 const G:float = 1000
 
 
+func _ready() -> void:
+	var entity_data = SandboxManager.get_entity('core:player').data
+	var entity := Entity.construct(entity_data)
+	entity.position = Vector2(0,0)
+	self.add_child(entity)
+	%Camera.position = Vector2(0,0)
+	%Camera.reparent(entity)
+
+
 func _process(_delta:float) -> void:
 	apply_planetary_gravity()
 

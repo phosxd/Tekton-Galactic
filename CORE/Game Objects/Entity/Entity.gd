@@ -1,4 +1,4 @@
-class_name Entity extends CharacterBody2D
+class_name Entity extends RigidBody2D
 ## Base class for all game entities. Uses a component system to determine behavior and functionality.
 
 const scene = preload('res://CORE/Game Objects/Entity/Entity.tscn')
@@ -22,7 +22,7 @@ static func construct(data:Dictionary) -> Entity:
 		new_entity.components.append(new_component)
 
 	new_entity.mass = data.DETAILS.mass
-	new_entity.get_node('Collision Shape').shape = default_collision_shape
+	new_entity.set_general_shape(default_collision_shape)
 	new_entity.get_node('Texture').texture = default_texture
 
 	new_entity.ready.connect(func() -> void:
@@ -36,3 +36,23 @@ static func construct(data:Dictionary) -> Entity:
 func _ready() -> void:
 	for component:Component in self.components:
 		component.init(self)
+
+
+func _process(_delta:float) -> void:
+	for component in self.components:
+		if component.has_method('tick'):
+			component.tick.call(_delta)
+
+
+# Setters.
+# --------
+func set_general_shape(collision_shape:Shape2D) -> void:
+	%'Collision Shape'.shape = collision_shape
+
+
+# Methods.
+# --------
+
+
+# Callbacks.
+# ----------

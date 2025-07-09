@@ -1,4 +1,9 @@
 {
+	"info": {
+		"type": "string",
+		"range": [3, 2000],
+		"default": "???",
+	},
 	"mass": {
 		"type": "float",
 		"range": [0.01, 100000],

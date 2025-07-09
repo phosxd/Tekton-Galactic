@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dpkf6aatw6to7"]
+[gd_scene load_steps=4 format=3 uid="uid://dpkf6aatw6to7"]
 
 [ext_resource type="Script" uid="uid://co5oka26arqpw" path="res://CORE/Game Scenes/World/World.gd" id="1_g6luc"]
 [ext_resource type="Script" uid="uid://ckp6xp6sqsm2e" path="res://CORE/Scripts/GridGenerator_square.gd" id="2_fj2j1"]
-[ext_resource type="PackedScene" uid="uid://dso7clk6lrikd" path="res://CORE/Game Objects/Planet/Planet.tscn" id="4_arlre"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g6luc"]
 size = Vector2(20, 500)
@@ -36,33 +35,36 @@ shape = SubResource("RectangleShape2D_g6luc")
 [node name="Grids" type="Node2D" parent="."]
 
 [node name="square4" type="Node2D" parent="Grids"]
-position = Vector2(195, 65)
+position = Vector2(42, 3)
 script = ExtResource("2_fj2j1")
-size = Vector2(10, 5)
+size = Vector2(30, 25)
 tile_id = &"core:stone"
 metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
 
 [node name="square5" type="Node2D" parent="Grids"]
-position = Vector2(-183, 119)
+position = Vector2(-31, 5)
 script = ExtResource("2_fj2j1")
-size = Vector2(50, 50)
+size = Vector2(4, 4)
 tile_id = &"core:stone"
 metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
 
 [node name="square7" type="Node2D" parent="Grids"]
-position = Vector2(-178, -122)
+position = Vector2(-30, -35)
 script = ExtResource("2_fj2j1")
-size = Vector2(10, 10)
+size = Vector2(5, 5)
+tile_id = &"core:unobtainium"
+metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
+
+[node name="square8" type="Node2D" parent="Grids"]
+position = Vector2(-6, -35)
+script = ExtResource("2_fj2j1")
+size = Vector2(2, 2)
 tile_id = &"core:unobtainium"
 metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
 
 [node name="Planets" type="Node2D" parent="."]
 
-[node name="Planet" parent="Planets" instance=ExtResource("4_arlre")]
-radius = 60
-hollow_radius = 50
-tile_id = "core:unobtainium"
-
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera" type="Camera2D" parent="."]
+unique_name_in_owner = true
 position = Vector2(7, -17)
-zoom = Vector2(2, 2)
+zoom = Vector2(3, 3)

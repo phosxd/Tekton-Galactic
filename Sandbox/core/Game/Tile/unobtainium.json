@@ -1,0 +1,18 @@
+{
+	"HEADER": {
+		"type": "tile",
+		"id": "core:unobtainium",
+		"version": "indev",
+	},
+	"DETAILS": {
+		"info": "We don't quite know what this is.",
+		"mass": 4000,
+		"integrity": 1,
+		"elasticity": 0.0,
+	},
+	"COMPONENTS": {
+		"texture": {
+			"variants": ["unobtanium"],
+		},
+	},
+}
