@@ -29,19 +29,19 @@ func tick(delta:float) -> void: ## Runs every entity tick.
 		if not Input.is_action_pressed('shift'):
 
 			if Input.is_action_pressed("move_up_dynamic"):
-				self.move(Vector2(0, -1))
+				self.move(Vector2.UP.rotated(self.entity.rotation))
 				recent_inputs['move_up_dynamic'] = time
 
 			if Input.is_action_pressed("move_down_dynamic"):
-				self.move(Vector2(0, 1))
+				self.move(Vector2.RIGHT.rotated(self.entity.rotation))
 				recent_inputs['move_right_dynamic'] = time
 
 			if Input.is_action_pressed("move_left_dynamic"):
-				self.move(Vector2(-1, 0))
+				self.move(Vector2.LEFT.rotated(self.entity.rotation))
 				recent_inputs['move_left_dynamic'] = time
 
 			if Input.is_action_pressed("move_right_dynamic"):
-				self.move(Vector2(1, 0))
+				self.move(Vector2.RIGHT.rotated(self.entity.rotation))
 				recent_inputs['move_right_dynamic'] = time
 
 		else:

@@ -4,6 +4,7 @@ const scene = preload('res://CORE/Game Objects/Grid/Grid.tscn')
 signal tile_added(tile:Tile)
 signal tile_removed(tile:Tile)
 
+var tiles:Dictionary[Vector2i,Tile] = {}
 var partitions:Array[TilePartition] = []
 var mouse_hovering:bool = false
 var mouse_dragging:bool = false
@@ -34,21 +35,33 @@ func get_energy() -> float:
 	return ((abs(self.linear_velocity.x)+abs(self.linear_velocity.y)) + abs(self.angular_velocity))
 
 
+func get_tile(position:Vector2i): ## Returns the tile at the given position, if doesn't exist returns null.
+	return self.tiles.get(position)
+
+
 func add_tile(tile:Tile) -> void: ## Adds the given tile to the grid, and recalculates grid mass.
-	if tile.get_parent() == null: self.add_child(tile)
-	else: tile.reparent(self)
+	if tile.get_parent() == null: add_child(tile)
+	else:
+		tile.get_grid().tiles.erase(Vector2i(tile.position))
+		tile.reparent(self)
+	self.tiles.set(Vector2i(tile.position), tile)
 	_calculate_mass()
 
 
 func add_tiles(tiles:Array[Tile]) -> void: ## Adds the given tiles to the grid, and recalculates grid mass. More efficient for adding multiple tiles at once.
 	for tile:Tile in tiles:
+		if not tile: continue
 		if tile.get_parent() == null: self.add_child(tile)
-		else: tile.reparent(self)
+		else:
+			tile.get_grid().tiles.erase(Vector2i(tile.position))
+			tile.reparent(self)
+		self.tiles.set(Vector2i(tile.position), tile)
 	_calculate_mass()
 
 
 func destroy_tile(tile:Tile) -> void: ## Destroys the given tile and recalculates grid mass.
 	if tile.get_grid() != self: return # Does nothing if not a part of the same grid.
+	self.tiles.erase(Vector2i(tile.position))
 	tile.free()
 	_calculate()
 
@@ -56,8 +69,12 @@ func destroy_tile(tile:Tile) -> void: ## Destroys the given tile and recalculate
 func disconnect_tile(tile:Tile) -> void: ## Disconnects the given tile and recalculates grid mass.
 	if tile.get_grid() != self: return # Does nothing if not a part of the same grid.
 	var new_grid := Grid.construct()
+
+	# Randomly disconnect neighboring tiles.
 	for neighbor:Tile in tile.get_neighbors():
+		if randi_range(0,1) == 0: continue
 		new_grid.add_tile(neighbor)
+
 	new_grid.add_tile(tile)
 	self.get_parent().add_child(new_grid)
 
@@ -113,21 +130,23 @@ func _find_separate_sections() -> Array[Array]:
 		var result := _recursive_tile_search([], child, passed_tiles)
 		passed_tiles = result.passed_tiles
 		if result.new_section.size() > 0: sections.append(result.new_section)
+	print(sections.size())
 
 	return sections
 
 
-func _recursive_tile_search(section:Array, tile:Tile, passed_tiles:Array[Tile]) -> Dictionary:
-	section.append(tile)
-	passed_tiles.append(tile)
-	for neighbor in tile.get_neighbors():
-		if not neighbor: continue
-		if neighbor is not Tile: continue
-		if not is_instance_valid(neighbor): continue
-		if passed_tiles.has(neighbor): continue
-		section.append(neighbor)
-		passed_tiles.append(neighbor)
-		_recursive_tile_search(section, neighbor, passed_tiles)
+func _recursive_tile_search(section:Array, origin_tile:Tile, passed_tiles:Array[Tile]) -> Dictionary:
+	var tiles_to_check:Array[Tile] = [origin_tile]
+	while not tiles_to_check.is_empty():
+		var tile:Tile = tiles_to_check.pop_front()
+		if not tile: continue
+		if tile is not Tile: continue
+		if not is_instance_valid(tile): continue
+		if passed_tiles.has(tile): continue
+		section.append(tile)
+		passed_tiles.append(tile)
+		for neighbor in tile.get_neighbors():
+			tiles_to_check.append(neighbor)
 
 	return {
 		'new_section': section,

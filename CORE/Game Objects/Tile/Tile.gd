@@ -1,12 +1,13 @@
 class_name Tile extends CollisionShape2D
 
 const scene = preload('res://CORE/Game Objects/Tile/Tile.tscn')
-const neighbor_margin = 0.1
 const default_mass:float = 100
 const default_integrity:float = 0.5
 const default_elasticity:float = 0.05
 const default_collision_shape:Shape2D = preload('res://CORE/Game Objects/Tile/default_collision_shape.tres')
 const default_texture:Texture2D = preload('res://CORE/Game Objects/Tile/default_texture.tres')
+
+signal tile_update
 
 var id:StringName ## Tile's type ID.
 var components:Array[Component] = [] ## Tile's components.
@@ -15,7 +16,6 @@ var integrity:float ## Tile's integrity.
 var elasticity:float ## Tile's elasticity. Non-functional at the moment.
 var _disconnect_energy_threshold:float
 var _destruction_energy_threshold:float
-var neighbors:Array[Tile] = [] ## Should not be used. Call `get_neighbors` instead.
 
 
 var callback_can_disconnect = func(energy:float) -> bool:
@@ -60,7 +60,6 @@ static func construct(data:Dictionary) -> Tile:
 # --------
 func set_general_shape(collision_shape:Shape2D) -> void:
 	self.shape = collision_shape
-	self.get_node('%Neighbor Margin/Collider').shape = _generate_neighbor_margin_shape(collision_shape)
 
 
 # Methods.
@@ -70,8 +69,23 @@ func get_grid():
 	return parent if parent is Grid else null
 
 
+func get_tile_from_offset(offset:Vector2i): ## Gets a tile from the parent `grid` using this `tile`'s position and the offset.
+	var grid = self.get_grid()
+	if not grid: return null
+	return grid.get_tile(Vector2i(self.position)+offset)
+
+
 func get_neighbors() -> Array[Tile]:
-	return neighbors
+	var tiles:Array[Tile] = []
+	var left = get_tile_from_offset(Vector2i.LEFT)
+	var right = get_tile_from_offset(Vector2i.RIGHT)
+	var up = get_tile_from_offset(Vector2i.UP)
+	var down = get_tile_from_offset(Vector2i.DOWN)
+	if left: tiles.append(left)
+	if right: tiles.append(right)
+	if up: tiles.append(up)
+	if down: tiles.append(down)
+	return tiles
 
 
 func sleep() -> void:
@@ -84,34 +98,8 @@ func wake() -> void:
 
 # Internal utility.
 # -----------------
-static func _generate_neighbor_margin_shape(origin:Shape2D) -> Shape2D:
-	var result:Shape2D
-	if origin is RectangleShape2D:
-		result = RectangleShape2D.new()
-		result.size.x = origin.size.x + neighbor_margin
-		result.size.y = origin.size.y + neighbor_margin
-	if origin is CircleShape2D:
-		result = CircleShape2D.new()
-		result.radius = origin.radius + neighbor_margin
-	return result
 
 
 
 # Callbacks.
 # ----------
-func _on_neighbor_margin_body_shape_entered(body_rid:RID, body:Node2D, body_shape_index:int, local_shape_index:int) -> void:
-	if body != self.get_grid(): return
-	if body_shape_index >= body.get_child_count(): return
-	var shape = body.get_child(body_shape_index)
-	if shape == self: return
-	if shape is not Tile: return
-	neighbors.append(shape)
-
-
-func _on_neighbor_margin_body_shape_exited(body_rid:RID, body:Node2D, body_shape_index:int, local_shape_index:int) -> void:
-	if body != self.get_grid(): return
-	if body_shape_index >= body.get_child_count(): return
-	var shape = body.get_child(body_shape_index)
-	if shape == self: return
-	if shape is not Tile: return
-	neighbors.erase(shape)

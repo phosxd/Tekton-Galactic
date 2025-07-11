@@ -7,12 +7,20 @@
 	"DETAILS": {
 		"info": "It's hard and brittle.",
 		"mass": 2500,
-		"integrity": 1,
+		"integrity": 0.01,
 		"elasticity": 0.0,
 	},
 	"COMPONENTS": {
 		"texture": {
+			"fit_shape": true,
 			"variants": ["stone_1"],
+		},
+		"shape": {
+			"normal": "tile_square",
+			"slope_bottom_left": "tile_slope_bottom_left",
+			"slope_bottom_right": "tile_slope_bottom_right",
+			"slope_top_left": "tile_slope_top_left",
+			"slope_top_right": "tile_slope_top_right",
 		},
 	},
 }

@@ -14,7 +14,7 @@
 			"speed": 300,
 			"rotational_speed": 100,
 		},
-		"collision_shape": {
+		"shape": {
 			"id": "player",
 		},
 	}

@@ -94,6 +94,10 @@ shift={
 2d_physics/layer_1="Main Physics Collision"
 2d_physics/layer_2="Tile Aura"
 
+[memory]
+
+limits/message_queue/max_size_mb=64
+
 [physics]
 
 2d/physics_engine="Rapier2D"

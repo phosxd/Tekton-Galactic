@@ -14,5 +14,8 @@
 		"texture": {
 			"variants": ["unobtanium"],
 		},
+		"shape": {
+			"id": "basic_tile",
+		},
 	},
 }

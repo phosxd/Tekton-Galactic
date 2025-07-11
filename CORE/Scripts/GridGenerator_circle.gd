@@ -2,6 +2,7 @@ class_name GridGenerator_circle extends Node2D
 
 @export var radius:int = 1
 @export var tile_id:StringName
+@export var smooth_surface:bool = false
 @export var linear_velocity:Vector2
 
 
@@ -13,10 +14,15 @@ func _ready() -> void:
 		var tiles:Array[Tile] = []
 		for i in range(radius * 2 + 1):
 			for j in range(radius * 2 + 1):
-				var x = i - radius
-				var y = j - radius
+				var x:int = i - radius
+				var y:int = j - radius
+				#var distance = x*x + y*y
+				#var is_edge = distance > (radius - 1) * (radius - 1) and distance <= radius * radius
 				if x*x + y*y <= radius * radius:
-					tiles.append(_make_tile(Vector2(x,y)))
+					var tile_position := Vector2i(x,y)
+					var new_tile:Tile
+					new_tile = _make_tile(tile_position)
+					tiles.append(new_tile)
 		grid.add_tiles(tiles)
 	)
 
@@ -27,8 +33,14 @@ func _ready() -> void:
 	self.queue_free()
 
 
-func _make_tile(position:Vector2) -> Tile:
+func _make_tile(position:Vector2i) -> Tile:
 	var tile_data = SandboxManager.get_tile(tile_id).data
+	var tile := Tile.construct(tile_data)
+	tile.position = Vector2(position)
+	return tile
+
+func _make_edge_tile(position:Vector2) -> Tile:
+	var tile_data = SandboxManager.get_tile('core:unobtainium').data
 	var tile := Tile.construct(tile_data)
 	tile.position = position
 	return tile
