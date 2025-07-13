@@ -12,10 +12,12 @@
 	},
 	"COMPONENTS": {
 		"texture": {
+			"fit_shape": true,
 			"variants": ["unobtanium"],
 		},
 		"shape": {
-			"id": "basic_tile",
+			"normal": {"id": "tile_square"},
+			"terrain": {"id": "tile_slope"},
 		},
 	},
 }

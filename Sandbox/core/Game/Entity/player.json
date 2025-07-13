@@ -11,11 +11,11 @@
 	"COMPONENTS": {
 		"2d_movement": {
 			"controller": "user",
-			"speed": 300,
-			"rotational_speed": 100,
+			"maximum_directional_force": 500,
+			"maximum_rotational_force": 250,
 		},
 		"shape": {
-			"id": "player",
+			"normal": {"id": "player"},
 		},
-	}
+	},
 }

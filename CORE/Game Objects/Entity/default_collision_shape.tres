@@ -1,5 +1,4 @@
-[gd_resource type="CapsuleShape2D" format=3 uid="uid://1lbde3tafckg"]
+[gd_resource type="RectangleShape2D" format=3 uid="uid://c5qv5ty6v12ut"]
 
 [resource]
-radius = 1.0
-height = 4.0
+size = Vector2(1, 2)

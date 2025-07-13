@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dpkf6aatw6to7"]
+[gd_scene load_steps=6 format=3 uid="uid://dpkf6aatw6to7"]
 
 [ext_resource type="Script" uid="uid://co5oka26arqpw" path="res://CORE/Game Scenes/World/World.gd" id="1_g6luc"]
+[ext_resource type="PackedScene" uid="uid://c1lldte0rehsa" path="res://CORE/Other Scenes/Background.tscn" id="2_arlre"]
 [ext_resource type="Script" uid="uid://ckp6xp6sqsm2e" path="res://CORE/Scripts/GridGenerator_square.gd" id="2_fj2j1"]
 [ext_resource type="Script" uid="uid://hsb8h3hoj6iy" path="res://CORE/Scripts/GridGenerator_circle.gd" id="3_g6luc"]
 
@@ -9,6 +10,15 @@ size = Vector2(20, 500)
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_g6luc")
+
+[node name="Background" parent="." instance=ExtResource("2_arlre")]
+texture_layer_mode = 1
+textures = Array[String](["stars", "stars"])
+texture_scales = Array[Vector2]([Vector2(0.1, 0.1), Vector2(0.1, 0.1)])
+texture_modulators = Array[Color]([Color(1, 1, 1, 0.682353), Color(1, 1, 1, 1)])
+parallax_scroll_scales = Array[Vector2]([Vector2(0.01, 0.01), Vector2(0.008, 0.008)])
+parallax_scroll_offsets = Array[Vector2]([Vector2(0, 0), Vector2(1000, 250)])
+parallax_repeat_times = Array[int]([4, 4])
 
 [node name="Border" type="StaticBody2D" parent="."]
 position = Vector2(-64, -16)
@@ -37,22 +47,15 @@ shape = SubResource("RectangleShape2D_g6luc")
 
 [node name="Grids" type="Node2D" parent="."]
 
-[node name="square4" type="Node2D" parent="Grids"]
-position = Vector2(42, 3)
-script = ExtResource("2_fj2j1")
-size = Vector2(30, 25)
-tile_id = &"core:stone"
-metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
-
 [node name="square5" type="Node2D" parent="Grids"]
-position = Vector2(-31, 5)
+position = Vector2(22, -7)
 script = ExtResource("2_fj2j1")
 size = Vector2(4, 4)
 tile_id = &"core:stone"
 metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
 
 [node name="square7" type="Node2D" parent="Grids"]
-position = Vector2(-30, -35)
+position = Vector2(-13, -12)
 script = ExtResource("2_fj2j1")
 size = Vector2(5, 5)
 tile_id = &"core:unobtainium"
@@ -68,15 +71,13 @@ metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
 [node name="Planets" type="Node2D" parent="."]
 
 [node name="GridGenerator_circle" type="Node2D" parent="Planets"]
-position = Vector2(1, 33)
+position = Vector2(10, 31)
 script = ExtResource("3_g6luc")
 radius = 20
 tile_id = &"core:stone"
-smooth_surface = true
 metadata/_custom_type_script = "uid://hsb8h3hoj6iy"
 
 [node name="Camera" type="Camera2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(7, -17)
 ignore_rotation = false
-zoom = Vector2(8, 8)
+zoom = Vector2(12.5, 12.5)

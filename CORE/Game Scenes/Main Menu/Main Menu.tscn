@@ -1,15 +1,20 @@
-[gd_scene format=3 uid="uid://bolad3oot6dtn"]
+[gd_scene load_steps=3 format=3 uid="uid://bolad3oot6dtn"]
+
+[ext_resource type="PackedScene" uid="uid://c1lldte0rehsa" path="res://CORE/Other Scenes/Background.tscn" id="1_bs2s1"]
+[ext_resource type="Script" uid="uid://bgsake7ivtbsv" path="res://CORE/Game Scenes/Main Menu/Main Menu.gd" id="1_wooag"]
 
 [node name="Main Menu" type="CanvasLayer"]
+script = ExtResource("1_wooag")
 
-[node name="Background" type="TextureRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-expand_mode = 1
-stretch_mode = 1
+[node name="Background" parent="." instance=ExtResource("1_bs2s1")]
+texture_layer_mode = 1
+textures = Array[String](["stars", "stars"])
+texture_scales = Array[Vector2]([Vector2(1.5, 1.5), Vector2(1.5, 1.5)])
+texture_modulators = Array[Color]([Color(1, 1, 1, 0.682353), Color(1, 1, 1, 1)])
+parallax_scroll_scales = Array[Vector2]([Vector2(0.8, 0.8), Vector2(0.3, 0.3)])
+parallax_scroll_offsets = Array[Vector2]([Vector2(0, 0), Vector2(100, 200)])
+parallax_autoscrolls = Array[Vector2]([Vector2(10, 40), Vector2(15, 40)])
+parallax_repeat_times = Array[int]([4, 4])
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchors_preset = 15
@@ -18,8 +23,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Button" type="Button" parent="VBoxContainer"]
+[node name="Button Start" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
-text = "Start"
+text = "Start Game"
+
+[connection signal="pressed" from="VBoxContainer/Button Start" to="." method="_on_button_start_pressed"]

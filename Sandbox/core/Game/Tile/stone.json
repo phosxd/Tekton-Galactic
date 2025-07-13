@@ -13,14 +13,11 @@
 	"COMPONENTS": {
 		"texture": {
 			"fit_shape": true,
-			"variants": ["stone_1"],
+			"variants": ["stone_1", "stone_2"],
 		},
 		"shape": {
-			"normal": "tile_square",
-			"slope_bottom_left": "tile_slope_bottom_left",
-			"slope_bottom_right": "tile_slope_bottom_right",
-			"slope_top_left": "tile_slope_top_left",
-			"slope_top_right": "tile_slope_top_right",
+			"normal": {"id": "tile_square"},
+			"terrain": {"id": "tile_slope"},
 		},
 	},
 }
