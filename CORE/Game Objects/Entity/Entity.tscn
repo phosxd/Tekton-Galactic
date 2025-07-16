@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bki71yshg5a3o"]
+[gd_scene load_steps=3 format=3 uid="uid://bki71yshg5a3o"]
 
 [ext_resource type="Script" uid="uid://cx2oio5p33enp" path="res://CORE/Game Objects/Entity/Entity.gd" id="1_riwi1"]
 [ext_resource type="Shape2D" uid="uid://c5qv5ty6v12ut" path="res://CORE/Game Objects/Entity/default_collision_shape.tres" id="2_djbdv"]
-[ext_resource type="Texture2D" uid="uid://dokxg838angch" path="res://CORE/Game Objects/Entity/default_texture.tres" id="3_lateh"]
 
 [node name="Entity" type="RigidBody2D"]
 center_of_mass_mode = 1
@@ -10,12 +9,13 @@ can_sleep = false
 continuous_cd = 1
 script = ExtResource("1_riwi1")
 
-[node name="Collision Shape" type="CollisionShape2D" parent="."]
+[node name="Shape" type="CollisionShape2D" parent="."]
 unique_name_in_owner = true
 shape = ExtResource("2_djbdv")
 
-[node name="Texture" type="Sprite2D" parent="."]
+[node name="Texture Mask" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Texture" type="Sprite2D" parent="Texture Mask"]
 unique_name_in_owner = true
 texture_filter = 1
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("3_lateh")

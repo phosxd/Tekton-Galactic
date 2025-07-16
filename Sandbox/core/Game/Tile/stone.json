@@ -12,7 +12,7 @@
 	},
 	"COMPONENTS": {
 		"texture": {
-			"fit_shape": true,
+			"clip_to_fit_shape": true,
 			"variants": ["stone_1", "stone_2"],
 		},
 		"shape": {

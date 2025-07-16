@@ -68,16 +68,23 @@ size = Vector2(2, 2)
 tile_id = &"core:unobtainium"
 metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
 
+[node name="square9" type="Node2D" parent="Grids"]
+position = Vector2(9, -22)
+script = ExtResource("2_fj2j1")
+size = Vector2(500, 2)
+tile_id = &"core:unobtainium"
+metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
+
 [node name="Planets" type="Node2D" parent="."]
 
 [node name="GridGenerator_circle" type="Node2D" parent="Planets"]
-position = Vector2(10, 31)
+position = Vector2(6, 43)
 script = ExtResource("3_g6luc")
-radius = 20
+radius = 40
 tile_id = &"core:stone"
 metadata/_custom_type_script = "uid://hsb8h3hoj6iy"
 
 [node name="Camera" type="Camera2D" parent="."]
 unique_name_in_owner = true
 ignore_rotation = false
-zoom = Vector2(12.5, 12.5)
+zoom = Vector2(20, 20)

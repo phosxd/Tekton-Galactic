@@ -12,8 +12,8 @@
 	},
 	"COMPONENTS": {
 		"texture": {
-			"fit_shape": true,
-			"variants": ["unobtanium"],
+			"clip_to_fit_shape": true,
+			"variants": ["unobtainium"],
 		},
 		"shape": {
 			"normal": {"id": "tile_square"},

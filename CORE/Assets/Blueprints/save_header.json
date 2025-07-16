@@ -1,0 +1,17 @@
+{
+	"type": {
+		"type": "string",
+		"enum": ["profile"],
+		"default": "none",
+	},
+	"id": {
+		"type": "string",
+		"regex": "[[:alnum:]_]{1,64}",
+		"default": "1",
+	},
+	"version": {
+		"type": "string",
+		"enum": ["indev"],
+		"default": "indev",
+	},
+}

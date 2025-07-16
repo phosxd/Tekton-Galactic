@@ -1,0 +1,14 @@
+{
+	"HEADER": {
+		"type": ">data_header",
+	},
+	"SETTINGS": {
+		"type": ">profile_settings",
+	},
+	"FLAGS": {
+		"type": "array",
+		"element_types": ["string"],
+		"enum": [],
+		"default": [],
+	},
+}

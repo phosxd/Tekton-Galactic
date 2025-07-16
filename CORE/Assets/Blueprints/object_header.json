@@ -1,0 +1,17 @@
+{
+	"type": {
+		"type": "string",
+		"enum": ["tile", "entity", "item"],
+		"default": "none",
+	},
+	"id": {
+		"type": "string",
+		"regex": "[[:alnum:]_]{1,16}:[[:alnum:]_]{1,64}",
+		"default": "pack:object",
+	},
+	"version": {
+		"type": "string",
+		"enum": ["indev"],
+		"default": "indev",
+	}
+}

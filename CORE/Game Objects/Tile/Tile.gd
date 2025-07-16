@@ -50,40 +50,41 @@ static func construct(data:Dictionary) -> Tile:
 	new_tile._disconnect_energy_threshold = (new_tile.mass*new_tile.integrity)
 	new_tile._destruction_energy_threshold = new_tile._disconnect_energy_threshold * 4
 	new_tile.set_shape(default_collision_shape)
-	var texture:Node2D = new_tile.get_node('%Texture')
-	var texture_clip:Node2D = new_tile.get_node('%Texture Clip')
-	texture.texture = default_texture
-
-	new_tile.ready.connect(func() -> void:
-		for component:Component in new_tile.components:
-			component.init.call_deferred(new_tile) # Assign component instance to this tile.
-		new_tile.tile_update.emit.call_deferred()
-	)
+	new_tile.set_main_texture()
 
 	new_tile.tile_update.connect(new_tile._tile_update)
 	new_tile.destroyed.connect(new_tile._destroyed)
 	new_tile.disconnected.connect(new_tile._disconnected)
-
-	texture_clip.draw.connect(func() -> void:
-		if new_tile.shape is RectangleShape2D:
-			texture_clip.draw_rect(new_tile.shape.get_rect(), Color.WHITE)
-		elif new_tile.shape is CircleShape2D:
-			texture_clip.draw_circle(Vector2.ZERO, new_tile.shape.radius, Color.WHITE)
-		elif new_tile.shape is ConvexPolygonShape2D:
-			texture_clip.draw_colored_polygon(new_tile.shape.points, Color.WHITE)
-		elif new_tile.shape is ConcavePolygonShape2D:
-			texture_clip.draw_colored_polygon(new_tile.shape.points, Color.WHITE)
-	)
+	new_tile.get_node('%Texture Mask').draw.connect(new_tile._draw_texture_mask)
 	return new_tile
+
+
+
+func _ready() -> void:
+	for component:Component in self.components:
+		component.init.call_deferred(self) # Assign component instance to this tile.
+	self.tile_update.emit.call_deferred()
+
+
 
 
 # Setters.
 # --------
-func set_general_shape(shape:Shape2D, rotation_degrees:float=0) -> void:
+func set_main_shape(shape:Shape2D, rotation_degrees:float=0) -> void:
 	if shape == self.shape && rotation_degrees == self.rotation_degrees: return
 	self.set_shape(shape)
 	self.rotation_degrees = rotation_degrees
-	%'Texture Clip'.queue_redraw()
+	%'Texture Mask'.queue_redraw()
+
+
+func set_main_texture(texture:Texture2D=default_texture, in_world_size:Vector2=Vector2.ONE, clip_to_fit_shape:bool=false, filter:TextureFilter=TEXTURE_FILTER_NEAREST) -> void:
+	if not texture: return
+	%Texture.texture = texture
+	%Texture.texture_filter = filter
+	%Texture.scale = Vector2(in_world_size/texture.get_size())
+	%'Texture Mask'.clip_children = CLIP_CHILDREN_ONLY if clip_to_fit_shape else CLIP_CHILDREN_DISABLED
+
+
 
 
 # Methods.
@@ -113,6 +114,16 @@ func get_neighbors() -> Dictionary[String,Tile]:
 	return tiles
 
 
+func start_hovering_tile() -> void: ## Let the tile know it is being hovered over by the cursor.
+	var new_material = ShaderMaterial.new()
+	new_material.shader = SandboxManager.get_shader('tile_highlight')
+	self.get_texture_node().material = new_material
+
+
+func stop_hovering_tile() -> void: ## Let the tile know it is no longer being hovered over by the cursor.
+	self.get_texture_node().material = null
+
+
 func sleep() -> void:
 	pass
 
@@ -121,14 +132,23 @@ func wake() -> void:
 
 
 
-# Internal utility.
-# -----------------
+# Internal.
+# ---------
+func _draw_texture_mask() -> void:
+	if self.shape is RectangleShape2D:
+		%'Texture Mask'.draw_rect(self.shape.get_rect(), Color.WHITE)
+	elif self.shape is CircleShape2D:
+		%'Texture Mask'.draw_circle(Vector2.ZERO, self.shape.radius, Color.WHITE)
+	elif self.shape is ConvexPolygonShape2D:
+		%'Texture Mask'.draw_colored_polygon(self.shape.points, Color.WHITE)
+	elif self.shape is ConcavePolygonShape2D:
+		%'Texture Mask'.draw_colored_polygon(self.shape.points, Color.WHITE)
+
+
 func _emit_neighbor_updates() -> void:
-	var index:int = -1
 	var neighbors := self.get_neighbors()
 	for key in neighbors:
 		var neighbor = neighbors[key]
-		index += 1
 		if not neighbor: continue
 		neighbor.neighbor_tile_update.emit(Constants.directions_dictionary[key])
 

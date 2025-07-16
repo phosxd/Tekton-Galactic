@@ -9,5 +9,5 @@ func _ready() -> void:
 	
 	SandboxManager.ready.connect(func() -> void:
 		var texture:Texture2D = SandboxManager.get_texture('cursor')
-		DisplayServer.cursor_set_custom_image(texture, 0, texture.get_size()/2)
+		DisplayServer.cursor_set_custom_image(texture, DisplayServer.CURSOR_ARROW, texture.get_size()/2)
 	)

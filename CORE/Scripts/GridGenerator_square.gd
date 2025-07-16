@@ -4,15 +4,18 @@ class_name GridGenerator_square extends Node2D
 @export var tile_id:StringName
 @export var linear_velocity:Vector2
 
+var tile_data:Dictionary
+
 
 func _ready() -> void:
+	self.tile_data = SandboxManager.get_tile(self.tile_id).data
+
 	var grid := Grid.construct()
 	grid.ready.connect(func() -> void:
-		var tiles:Array[Tile] = []
 		for x in range(size.x):
 			for y in range(size.y):
-				tiles.append(_make_tile(Vector2(x,y)))
-		grid.add_tiles(tiles)
+				grid.add_tile(_make_tile(Vector2(x,y)), false)
+		grid._calculate_mass()
 	)
 	grid.position = self.position
 	grid.linear_velocity = self.linear_velocity
@@ -22,8 +25,7 @@ func _ready() -> void:
 	self.queue_free.call_deferred()
 
 
-func _make_tile(position:Vector2) -> Tile:
-	var tile_data = SandboxManager.get_tile(tile_id).data
+func _make_tile(tile_position:Vector2) -> Tile:
 	var tile := Tile.construct(tile_data)
-	tile.position = position
+	tile.position = tile_position
 	return tile

@@ -1,6 +1,6 @@
 {
 	"HEADER": {
-		"type": ">header",
+		"type": ">object_header",
 	},
 	"DETAILS": {
 		"type": ">tile_details",

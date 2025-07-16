@@ -22,13 +22,11 @@ static func construct(data:Dictionary) -> Entity:
 		new_entity.components.append(new_component)
 
 	new_entity.mass = data.DETAILS.mass
-	new_entity.set_general_shape(default_collision_shape)
-	new_entity.get_node('Texture').texture = default_texture
+	new_entity.set_main_shape(default_collision_shape)
+	new_entity.set_main_texture(default_texture, Vector2(1,2))
 
-	new_entity.ready.connect(func() -> void:
-		for component:Component in new_entity.components:
-			component.init(new_entity) # Assign component instance to this tile.
-	)
+	new_entity.get_node('%Texture Mask').draw.connect(new_entity._draw_texture_mask)
+
 	return new_entity
 	
 
@@ -46,12 +44,34 @@ func _process(_delta:float) -> void:
 
 # Setters.
 # --------
-func set_general_shape(collision_shape:Shape2D) -> void:
-	%'Collision Shape'.shape = collision_shape
+func set_main_shape(shape:Shape2D, shape_rotation_degrees:float=0) -> void:
+	%'Shape'.set_shape(shape)
+	%"Shape".rotation_degrees = shape_rotation_degrees
+
+
+func set_main_texture(texture:Texture2D, in_world_size:Vector2=Vector2.ONE, clip_to_fit_shape:bool=false, filter:TextureFilter=TEXTURE_FILTER_NEAREST) -> void:
+	if not texture: return
+	%Texture.texture = texture
+	%Texture.texture_filter = filter
+	%Texture.scale = Vector2(in_world_size/texture.get_size())
+	%'Texture Mask'.clip_children = CLIP_CHILDREN_ONLY if clip_to_fit_shape else CLIP_CHILDREN_DISABLED
 
 
 # Methods.
 # --------
+
+
+# Internal.
+# ---------
+func _draw_texture_mask() -> void:
+	if %Shape.shape is RectangleShape2D:
+		%'Texture Mask'.draw_rect(%Shape.shape.get_rect(), Color.WHITE)
+	elif %Shape.shape is CircleShape2D:
+		%'Texture Mask'.draw_circle(Vector2.ZERO, %Shape.shape.radius, Color.WHITE)
+	elif %Shape.shape is ConvexPolygonShape2D:
+		%'Texture Mask'.draw_colored_polygon(%Shape.shape.points, Color.WHITE)
+	elif %Shape.shape is ConcavePolygonShape2D:
+		%'Texture Mask'.draw_colored_polygon(%Shape.shape.points, Color.WHITE)
 
 
 # Callbacks.

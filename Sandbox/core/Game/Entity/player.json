@@ -11,8 +11,8 @@
 	"COMPONENTS": {
 		"2d_movement": {
 			"controller": "user",
-			"maximum_directional_force": 500,
-			"maximum_rotational_force": 250,
+			"maximum_directional_force": 250,
+			"maximum_rotational_force": 50,
 		},
 		"shape": {
 			"normal": {"id": "player"},

@@ -10,9 +10,11 @@ const Shape_assets_path:String = Assets_path+'/Shape'
 const Game_path:String = 'Game'
 const Game_tile_path:String = Game_path+'/Tile'
 const Game_entity_path:String = Game_path+'/Entity'
+const Game_generator_path:String = Game_path+'/Generator'
 const Game_component_path:String = Game_path+'/Component'
 const Game_tile_component_path:String = Game_component_path+'/Tile'
 const Game_entity_component_path:String = Game_component_path+'/Entity'
+const Game_generator_component_path:String = Game_component_path+'/Generator'
 
 # Placeholder objects.
 var Placeholder_texture:Texture2D
@@ -27,9 +29,11 @@ var shaders:Dictionary[String,Shader] = {}
 var shapes:Dictionary[String,Shape2D] = {}
 var tiles:Dictionary[String,SandboxObject] = {}
 var entities:Dictionary[String,SandboxObject] = {}
+var generators:Dictionary[String,SandboxObject] = {}
 var components:Dictionary[String,GDScript] = {}
 var tile_components:Dictionary[String,GDScript] = {}
 var entity_components:Dictionary[String,GDScript] = {}
+var generator_components:Dictionary[String,GDScript] = {}
 
 
 
@@ -93,6 +97,16 @@ func load_sandbox(root_path:String) -> void:
 		if not sandbox_object.valid: continue
 		self.entities[sandbox_object.id] = sandbox_object 
 
+	# Load generators.
+	var game_generator_directory = DirAccess.open(root_path+'/'+Game_generator_path)
+	for filename:String in game_generator_directory.get_files():
+		if not filename.ends_with('.json'): continue
+		var json_data = FileUtils.open_file_as_json(root_path+'/'+Game_generator_path+'/'+filename)
+		if not json_data: continue
+		var sandbox_object := SandboxObject.new(json_data)
+		if not sandbox_object.valid: continue
+		self.generators[sandbox_object.id] = sandbox_object 
+
 	# Load components.
 	var game_component_directory = DirAccess.open(root_path+'/'+Game_component_path)
 	for filename:String in game_component_directory.get_files():
@@ -114,11 +128,20 @@ func load_sandbox(root_path:String) -> void:
 		var script = load(root_path+'/'+Game_entity_component_path+'/'+filename)
 		self.entity_components[script.name] = script
 
+	# Load generator components.
+	var game_generator_component_directory = DirAccess.open(root_path+'/'+Game_generator_component_path)
+	for filename:String in game_generator_component_directory.get_files():
+		if not filename.ends_with('.gd'): continue
+		var script = load(root_path+'/'+Game_generator_component_path+'/'+filename)
+		self.generator_components[script.name] = script
+
 
 
 
 func get_texture(id:String): ## Return texture from the file name / file path (Starting from the texture assets directory). If unable to open as a texture, returns placeholder texture.
-	return self.textures.get(id)
+	var texture = self.textures.get(id)
+	if not texture: texture = Placeholder_texture
+	return texture
 
 
 func get_shader(id:String): ## Return shader from the file name / file path (Starting from the shader assets directory). If unable to open as a shader, returns placeholder shader.

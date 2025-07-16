@@ -1,0 +1,18 @@
+{
+	"HEADER": {
+		"type": "generator",
+		"id": "core:asteroid",
+		"version": "indev",
+	},
+	"DETAILS": {
+		"distance_between_points": 1,
+	},
+	"COMPONENTS": {
+		"fill_with_tile": {
+			"id": "core:stone",
+		},
+		"shape_circle": {
+			"radius_range": [8,13]
+		},
+	},
+}

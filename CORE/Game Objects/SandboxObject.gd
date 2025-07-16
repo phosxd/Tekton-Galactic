@@ -9,7 +9,7 @@ var valid:bool = false
 
 
 func _init(data:Dictionary) -> void:
-	var header_blueprint = BlueprintManager.get_blueprint('header')
+	var header_blueprint = BlueprintManager.get_blueprint('object_header')
 	if not header_blueprint: return
 	var header_data:Dictionary = data.get('HEADER',{})
 	var matched_header:Dictionary = header_blueprint.match(header_data.duplicate(true))

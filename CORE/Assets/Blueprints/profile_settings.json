@@ -1,0 +1,14 @@
+{
+	"display_name": {
+		"type": "string",
+		"default": "Player",
+	},
+	"character": {
+		"type": "string",
+		"default": "default",
+	},
+	"debug_mode": {
+		"type": "bool",
+		"default": false,
+	},
+}

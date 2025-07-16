@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://0muno1y4b0r8" path="res://CORE/Game Objects/Grid/Grid.gd" id="1_2g84l"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vmm7n"]
+bounce = 0.1
 
 [node name="Grid" type="RigidBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_vmm7n")
@@ -14,7 +15,12 @@ contact_monitor = true
 max_contacts_reported = 1000
 script = ExtResource("1_2g84l")
 
+[node name="CM Visualizer" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0.607843)
+
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
 [connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mass_updated" from="." to="." method="_on_mass_updated"]
 [connection signal="mouse_shape_entered" from="." to="." method="_on_mouse_shape_entered"]
 [connection signal="mouse_shape_exited" from="." to="." method="_on_mouse_shape_exited"]

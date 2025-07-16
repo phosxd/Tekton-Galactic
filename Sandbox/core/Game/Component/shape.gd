@@ -15,7 +15,7 @@ func init(object) -> void:
 	terrain_shape = SandboxManager.get_shape(self.parameters.terrain.id)
 
 	# Apply the shape, if it exists.
-	object.set_general_shape(normal_shape)
+	object.set_main_shape(normal_shape)
 
 	# Connect signals for terrain shape.
 	if object is Tile:
@@ -25,19 +25,19 @@ func init(object) -> void:
 			self.update_terrain_shape(direction)
 
 
-func update_terrain_shape(tile_direction:Vector2i) -> void:
+func update_terrain_shape(_tile_direction:Vector2i) -> void:
 	var neighbors:Dictionary[String,Tile] = self.object.get_neighbors()
 	var up = neighbors.up
 	var down = neighbors.down
 	var left = neighbors.left
 	var right = neighbors.right
 	if not up && down && left && not right:
-		self.object.set_general_shape(terrain_shape, 0)
+		self.object.set_main_shape(terrain_shape, 0)
 	elif not up && down && not left && right:
-		self.object.set_general_shape(terrain_shape, -90)
+		self.object.set_main_shape(terrain_shape, -90)
 	elif up && not down && left && not right:
-		self.object.set_general_shape(terrain_shape, 90)
+		self.object.set_main_shape(terrain_shape, 90)
 	elif up && not down && not left && right:
-		self.object.set_general_shape(terrain_shape, 180)
+		self.object.set_main_shape(terrain_shape, 180)
 	else:
-		self.object.set_general_shape(normal_shape, 0)
+		self.object.set_main_shape(normal_shape, 0)
