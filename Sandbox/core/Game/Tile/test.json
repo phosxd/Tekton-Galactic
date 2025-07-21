@@ -1,0 +1,21 @@
+{
+	"HEADER": {
+		"type": "tile",
+		"id": "core:test",
+		"version": "indev",
+	},
+	"DETAILS": {
+		"info": "???",
+		"mass": 10,
+		"integrity": 0.05,
+		"elasticity": 0.0,
+	},
+	"COMPONENTS": {
+		"texture": {
+			"variants": ["concrete_1"],
+		},
+		"shape": {
+			"normal": {"id": "tile_square"},
+		},
+	},
+}

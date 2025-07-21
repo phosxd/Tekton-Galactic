@@ -1,6 +1,6 @@
 class_name World extends Node2D
 
-const G:float = 0.001
+const G:float = 0.001/100
 
 
 func _ready() -> void:
@@ -22,18 +22,20 @@ func apply_planetary_gravity() -> void: ## Calculates gravitational force from p
 		if first.mass <= 0: continue
 		for second:Grid in $Grids.get_children(): 
 			if not is_instance_valid(second): continue
-			var direction:Vector2 = second.get_center() - first.get_center()
-			var distance_squared:float = direction.length_squared()
-			var force:float = (World.G * (first.mass*second.mass)/distance_squared)
-			var force_vector = direction.normalized() * force
-			if is_nan(force_vector.x) || is_nan(force_vector.y): continue
-			second.apply_force(-force_vector/second.mass)
+			second.apply_force(MathUtils.calculate_gravitational_force(
+				World.G,
+				first.get_center(),
+				second.get_center(),
+				first.mass,
+				second.mass
+			))
 
 		for second:Entity in $Entities.get_children():
 			if not is_instance_valid(second): continue
-			var direction:Vector2 = second.position - first.get_center()
-			var distance_squared:float = direction.length_squared()
-			var force:float = (World.G * (first.mass*second.mass)/distance_squared)
-			var force_vector = direction.normalized() * force
-			if is_nan(force_vector.x) || is_nan(force_vector.y): continue
-			second.apply_force(-force_vector/second.mass)
+			second.apply_force(MathUtils.calculate_gravitational_force(
+				World.G,
+				first.get_center(),
+				second.position,
+				first.mass,
+				second.mass
+			))

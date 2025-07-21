@@ -7,10 +7,15 @@ const default_elasticity:float = 0.05
 const default_collision_shape:Shape2D = preload('res://CORE/Game Objects/Tile/default_collision_shape.tres')
 const default_texture:Texture2D = preload('res://CORE/Game Objects/Tile/default_texture.tres')
 
+var grid_position := Vector2i() ## Used to determine the true position of the tile. `Node2D.position` is unreliable when parent Grid is moving in space.
+
 signal tile_update
 signal neighbor_tile_update(direction:Vector2i)
-signal destroyed
-signal disconnected
+signal before_destroyed
+signal before_disconnected
+
+signal after_destroyed
+signal after_disconnected
 
 var id:StringName ## Tile's type ID.
 var components:Array[Component] = [] ## Tile's components.
@@ -53,9 +58,12 @@ static func construct(data:Dictionary) -> Tile:
 	new_tile.set_main_texture()
 
 	new_tile.tile_update.connect(new_tile._tile_update)
-	new_tile.destroyed.connect(new_tile._destroyed)
-	new_tile.disconnected.connect(new_tile._disconnected)
+	new_tile.before_destroyed.connect(new_tile._before_destroyed)
+	new_tile.before_disconnected.connect(new_tile._before_disconnected)
+	new_tile.after_destroyed.connect(new_tile._after_destroyed)
+	new_tile.after_disconnected.connect(new_tile._after_disconnected)
 	new_tile.get_node('%Texture Mask').draw.connect(new_tile._draw_texture_mask)
+
 	return new_tile
 
 
@@ -90,7 +98,7 @@ func set_main_texture(texture:Texture2D=default_texture, in_world_size:Vector2=V
 # Methods.
 # --------
 func get_grid():
-	var parent = $'../'
+	var parent = self.get_parent()
 	return parent if parent is Grid else null
 
 
@@ -117,10 +125,18 @@ func get_neighbors() -> Dictionary[String,Tile]:
 func start_hovering_tile() -> void: ## Let the tile know it is being hovered over by the cursor.
 	var new_material = ShaderMaterial.new()
 	new_material.shader = SandboxManager.get_shader('tile_highlight')
+	#for neighbor:Tile in self.get_neighbors().values():
+		#if not neighbor: continue
+		#neighbor.get_texture_node().material = new_material
+		#neighbor.get_texture_node().modulate = Color.RED
 	self.get_texture_node().material = new_material
 
 
 func stop_hovering_tile() -> void: ## Let the tile know it is no longer being hovered over by the cursor.
+	#for neighbor:Tile in self.get_neighbors().values():
+		#if not neighbor: continue
+		#neighbor.get_texture_node().material = null
+		#neighbor.get_texture_node().modulate = Color.WHITE
 	self.get_texture_node().material = null
 
 
@@ -156,13 +172,20 @@ func _emit_neighbor_updates() -> void:
 
 # Callbacks.
 # ----------
-func _destroyed() -> void:
+func _before_destroyed() -> void:
 	self.tile_update.emit()
-	self.queue_free()
 
 
-func _disconnected() -> void:
+func _before_disconnected() -> void:
 	self.tile_update.emit()
+
+
+func _after_destroyed() -> void:
+	pass
+
+
+func _after_disconnected() -> void:
+	pass
 
 
 func _tile_update() -> void:

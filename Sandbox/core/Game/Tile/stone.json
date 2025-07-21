@@ -16,8 +16,8 @@
 			"variants": ["stone_1", "stone_2"],
 		},
 		"shape": {
+			"use_surface_polygon": true,
 			"normal": {"id": "tile_square"},
-			"terrain": {"id": "tile_slope"},
 		},
 	},
 }

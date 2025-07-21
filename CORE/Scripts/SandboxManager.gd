@@ -138,23 +138,26 @@ func load_sandbox(root_path:String) -> void:
 
 
 
-func get_texture(id:String): ## Return texture from the file name / file path (Starting from the texture assets directory). If unable to open as a texture, returns placeholder texture.
+func get_texture(id:String, default:Texture2D=Placeholder_texture): ## Return texture from the file name / file path (Starting from the texture assets directory). If unable to open as a texture, returns placeholder texture.
 	var texture = self.textures.get(id)
-	if not texture: texture = Placeholder_texture
-	return texture
+	return texture if texture else default
 
 
-func get_shader(id:String): ## Return shader from the file name / file path (Starting from the shader assets directory). If unable to open as a shader, returns placeholder shader.
-	return self.shaders.get(id)
+func get_shader(id:String, default=null): ## Return shader from the file name / file path (Starting from the shader assets directory). If unable to open as a shader, returns placeholder shader.
+	var shader = self.shaders.get(id)
+	return shader if shader else default
 
 
-func get_shape(id:String):
-	return self.shapes.get(id)
+func get_shape(id:String, default:Shape2D=Placeholder_shape):
+	var shape = self.shapes.get(id)
+	return shape if shape else default
 
 
-func get_tile(id:String): ## Returns tile data from the tile ID. If unable to open as a `SandboxObject`, returns placeholder tile.
-	return self.tiles.get(id)
+func get_tile(id:String, default=null): ## Returns tile data from the tile ID. If unable to open as a `SandboxObject`, returns placeholder tile.
+	var tile = self.tiles.get(id)
+	return tile if tile else default
 
 
-func get_entity(id:String):
-	return self.entities.get(id)
+func get_entity(id:String, default=null):
+	var entity = self.entities.get(id)
+	return entity if entity else default

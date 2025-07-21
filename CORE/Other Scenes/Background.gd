@@ -37,6 +37,7 @@ func _ready() -> void:
 		new_sprite.position = (texture.get_size()/2)
 		new_sprite.self_modulate = self.texture_modulators[i]
 		new_sprite.material = layering_material
+		new_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
 		new_parallax.add_child(new_sprite)
 		self.add_child(new_parallax)

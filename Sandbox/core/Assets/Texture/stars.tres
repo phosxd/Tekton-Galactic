@@ -1,6 +1,7 @@
 [gd_resource type="NoiseTexture2D" load_steps=3 format=3 uid="uid://trqh5byb0ifi"]
 
 [sub_resource type="Gradient" id="Gradient_jvap5"]
+interpolation_color_space = 2
 offsets = PackedFloat32Array(0.85, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ba8x4"]

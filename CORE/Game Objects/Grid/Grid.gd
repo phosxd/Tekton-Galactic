@@ -40,53 +40,69 @@ func get_tile(position:Vector2i): ## Returns the tile at the given position, if 
 	return tile
 
 
-func add_tile(tile:Tile, extra_operations:bool=true) -> void: ## Adds the given tile to the grid. Recalculates grid mass if `extra_operations` is true.
-	if not tile: return
-	if tile.get_parent() == null:
-		add_child(tile)
+func add_tile(tile:Tile, position:Vector2i, extra_operations:bool=true) -> bool: ## Adds the given tile to the grid. Recalculates grid mass if `extra_operations` is true. Returns `true` if succesfully added the tile.
+	if not tile: return false
+	tile.grid_position = position
+	tile.position = Vector2(position)
+	if tile.get_grid() == null:
+		self.add_child(tile)
 	else:
-		tile.get_grid().tiles.erase(Vector2i(tile.position))
+		tile.get_grid().tiles.erase(tile.grid_position)
 		tile.reparent(self)
-	var current_tile = self.tiles.get(Vector2i(tile.position))
+
+	var current_tile = self.get_tile(tile.grid_position)
 	if current_tile != null:
-		destroy_tile(current_tile)
-	self.tiles.set(Vector2i(tile.position), tile)
+		self.destroy_tile(current_tile, false)
+
+	self.tiles.set(tile.grid_position, tile)
 	self.tile_added.emit(tile)
 
 	if extra_operations:
 		_calculate_mass()
 
+	return true
 
-func add_tiles(tiles:Array[Tile]) -> void: ## Adds the given tiles to the grid. Recalculates grid mass if `extra_operations` is true. More efficient for adding multiple tiles at once.
-	_iterate_tiles(func(_index:int, tile:Tile) -> bool:
-		self.add_tile(tile, false)
+
+func add_tiles(tiles:Array[Tile], positions:Array[Vector2i]) -> void: ## Adds the given tiles to the grid. Recalculates grid mass if `extra_operations` is true. More efficient for adding multiple tiles at once.
+	_iterate_tiles(func(index:int, tile:Tile) -> bool:
+		self.add_tile(tile, positions[index], false)
 		return true
 	,true, tiles)
 
 
-func destroy_tile(tile:Tile, extra_operations:bool=true) -> void: ## Destroys the given tile. Recalculates grid mass if `extra_operations` is true.
-	if not tile: return
-	if not is_instance_valid(tile): return
-	if tile.get_grid() != self: return # Does nothing if not a part of the same grid.
-	self.tiles.erase(Vector2i(tile.position))
-	tile.destroyed.emit()
+func destroy_tile(tile:Tile, extra_operations:bool=true) -> bool: ## Destroys the given tile. Recalculates grid mass if `extra_operations` is true. Returns `true` if succesfully destroyed the tile.
+	if not tile: return false
+	if not is_instance_valid(tile): return false
+	if tile.get_grid() != self: return false
+
+	tile.before_destroyed.emit()
+	self.tiles.erase(tile.grid_position)
+	tile.queue_free()
+	tile.after_destroyed.emit()
 
 	if extra_operations:
 		_calculate()
+
+	return true
 
 
 func disconnect_tile(tile:Tile, extra_operations:bool=true) -> void: ## Disconnects the given tile. Recalculates grid mass if `extra_operations` is true.
 	if tile.get_grid() != self: return # Does nothing if not a part of the same grid.
 	var new_grid := Grid.construct()
+	new_grid.position = self.position
+	new_grid.rotation = self.rotation
 	# Randomly disconnect neighboring tiles.
 	for neighbor:Tile in tile.get_neighbors().values():
 		if not neighbor: continue 
+		if not is_instance_valid(neighbor): continue
 		if randi_range(0,1) == 0: continue
-		neighbor.disconnected.emit()
-		new_grid.add_tile(neighbor)
-	new_grid.add_tile(tile)
+		neighbor.before_disconnected.emit()
+		new_grid.add_tile(neighbor, neighbor.grid_position)
+		neighbor.after_disconnected.emit()
+	tile.before_disconnected.emit()
+	new_grid.add_tile(tile, tile.grid_position)
 	self.get_parent().add_child(new_grid)
-	tile.disconnected.emit()
+	tile.after_disconnected.emit()
 
 	if extra_operations:
 		_calculate()
@@ -105,16 +121,17 @@ func _iterate_tiles(function=null, calculate_mass:bool=false, tiles_array_overri
 	else: tiles = self.tiles.values()
 
 	for tile:Tile in tiles:
+		if not is_instance_valid(tile): continue
 		count += 1
 		if function:
-			if not function.call(count-1, tile): continue
+			if not function.call(count-1, tile) == true: continue
 		if calculate_mass:
-			total_position += tile.position
+			total_position += tile.grid_position * tile.mass
 			total_mass += tile.mass
 
 	if calculate_mass:
 		if total_mass <= 0: total_mass = 0.00001
-		self.center_of_mass = total_position/count
+		self.center_of_mass = total_position/total_mass
 		self.mass = total_mass
 		self.mass_updated.emit()
 
@@ -127,39 +144,52 @@ func _calculate() -> void:
 	if not self: return
 	if not is_instance_valid(self): return
 
-	# Separate all structurally disconnected sections of the Grid.
-	var sections := _find_separate_sections()
-	var section_index:int = -1
-	for section:Array[Tile] in sections:
-		section_index += 1
-		if section_index == 0: continue
-		var section_grid := Grid.construct()
-		for section_tile:Tile in section:
-			section_grid.add_tile(section_tile)
-		section_grid.linear_velocity = self.linear_velocity
-		section_grid.angular_velocity = self.angular_velocity
-		# Yeah so I couldn't find out why sometimes this function is called before the Grid is assigned a parent.
-		# This check just ensures the game doesn't crash until I can find out how to prevent this.
-		if self.get_parent() != null:
-			self.get_parent().add_child(section_grid)
-	
-	# Recalculate mass & destroy Grid if empty.
 	var tile_count:int = 0
-	for child in self.get_children():
-		if child is Tile: tile_count += 1
-	if tile_count == 0: self.queue_free()
-	else: _calculate_mass()
+	for key in self.tiles:
+		var value = self.tiles[key]
+		if not value: self.tiles.erase(key)
+		tile_count += 1
+	if tile_count == 0:
+		self.queue_free()
+		return
+
+	# Separate all structurally disconnected sections of the Grid.
+	# Yeah so I couldn't find out why sometimes this function is called before the Grid is assigned a parent.
+	# This check just ensures the game doesn't crash until I can find out how to prevent this.
+	if self.get_parent() != null:
+		var sections := _find_separate_sections()
+		var section_index:int = -1
+		for section:Array[Tile] in sections:
+			section_index += 1
+			if section_index == 0: continue
+			if section.is_empty(): continue
+			var section_grid := Grid.construct()
+			self.get_parent().add_child(section_grid)
+			section_grid.linear_velocity = self.linear_velocity
+			section_grid.angular_velocity = self.angular_velocity
+			if section.size() > 0:
+				section_grid.position = self.position
+				section_grid.rotation = self.rotation
+			for tile:Tile in section:
+				section_grid.add_tile(tile, tile.grid_position, false)
+			section_grid._calculate_mass()
+	else: print('hi')
+
+	_calculate_mass()
 
 
 func _find_separate_sections() -> Array[Array]:
+	if not is_instance_valid(self): return []
 	var sections:Array[Array] = []
 	var passed_tiles:Dictionary[Tile,Variant] = {}
-	for child in self.get_children():
-		if child is not Tile: continue
-		if child in passed_tiles: continue
-		var result := _recursive_tile_search([], child, passed_tiles)
+	for tile:Tile in self.tiles.values():
+		if not tile: continue
+		if not is_instance_valid(tile): continue
+		if tile.is_queued_for_deletion(): continue
+		var result := _recursive_tile_search([], tile, passed_tiles)
 		passed_tiles = result.passed_tiles
-		if result.new_section.size() > 0: sections.append(result.new_section)
+		if result.new_section.size() > 0:
+			sections.append(result.new_section)
 	print(sections.size())
 
 	return sections
@@ -176,7 +206,7 @@ func _recursive_tile_search(section:Array, origin_tile:Tile, passed_tiles:Dictio
 		if passed_tiles.has(tile): continue
 		section.append(tile)
 		passed_tiles.set(tile, null)
-		for neighbor in tile.get_neighbors().values():
+		for neighbor:Tile in tile.get_neighbors().values():
 			tiles_to_check.append(neighbor)
 
 	return {
@@ -215,9 +245,9 @@ func _on_mass_updated() -> void:
 
 
 func _on_body_shape_entered(_body_rid:RID, body:Node, _body_shape_index:int, local_shape_index:int) -> void:
-	if self.get_child_count()-1 < local_shape_index: return
-	if self.get_child(local_shape_index) is not Tile: return
-	var tile:Tile = self.get_child(local_shape_index)
+	var tile = _get_child_from_shape_idx(local_shape_index)
+	if not tile: return
+	if tile is not Tile: return
 	if body is Grid:
 		_resolve_collision(body, tile)
 
@@ -234,7 +264,7 @@ func _on_mouse_shape_entered(shape_idx:int) -> void:
 	var node:Node = _get_child_from_shape_idx(shape_idx)
 	if not node: return
 	if node is not Tile: return
-	node.start_hovering_tile()
+	node.start_hovering_tile.call_deferred()
 
 
 func _on_mouse_shape_exited(shape_idx:int) -> void:

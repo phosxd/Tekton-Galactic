@@ -16,6 +16,7 @@
 			"variants": ["unobtainium"],
 		},
 		"shape": {
+			"use_terrain_polygon": true,
 			"normal": {"id": "tile_square"},
 			"terrain": {"id": "tile_slope"},
 		},

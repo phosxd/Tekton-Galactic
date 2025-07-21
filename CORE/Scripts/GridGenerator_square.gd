@@ -11,12 +11,7 @@ func _ready() -> void:
 	self.tile_data = SandboxManager.get_tile(self.tile_id).data
 
 	var grid := Grid.construct()
-	grid.ready.connect(func() -> void:
-		for x in range(size.x):
-			for y in range(size.y):
-				grid.add_tile(_make_tile(Vector2(x,y)), false)
-		grid._calculate_mass()
-	)
+	grid.rotation = self.rotation
 	grid.position = self.position
 	grid.linear_velocity = self.linear_velocity
 	for child:Node in self.get_children():
@@ -24,8 +19,13 @@ func _ready() -> void:
 	self.get_parent().add_child.call_deferred(grid)
 	self.queue_free.call_deferred()
 
+	for x in range(size.x):
+		for y in range(size.y):
+			var new_tile = _make_tile()
+			grid.add_tile(new_tile, Vector2i(x,y), false)
+	grid._calculate_mass()
 
-func _make_tile(tile_position:Vector2) -> Tile:
+
+func _make_tile() -> Tile:
 	var tile := Tile.construct(tile_data)
-	tile.position = tile_position
 	return tile

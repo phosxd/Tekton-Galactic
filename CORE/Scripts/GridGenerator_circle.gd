@@ -24,11 +24,10 @@ func _ready() -> void:
 				var is_tip = (x == -radius) or (x == radius) or (y == -radius) or (y == radius)
 				if is_tip: continue
 				if x*x + y*y <= radius * radius:
-					var tile_position := Vector2i(x,y)
 					var new_tile:Tile
-					new_tile = _make_tile(tile_position)
-					grid.add_tile(new_tile, false)
-					total_position += new_tile.position
+					new_tile = _make_tile()
+					grid.add_tile(new_tile, Vector2i(x,y), false)
+					total_position += Vector2(new_tile.grid_position)
 					total_mass += new_tile.mass
 					count += 1
 
@@ -45,7 +44,6 @@ func _ready() -> void:
 	self.queue_free.call_deferred()
 
 
-func _make_tile(tile_position:Vector2i) -> Tile:
+func _make_tile() -> Tile:
 	var tile := Tile.construct(self.tile_data)
-	tile.position = Vector2(tile_position)
 	return tile
