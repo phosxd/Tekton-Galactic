@@ -1,3 +1,4 @@
+## Entity Component for implementing 2D directional & rotational movement.
 extends EntityComponent
 const name := '2d_movement'
 

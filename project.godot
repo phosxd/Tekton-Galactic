@@ -52,7 +52,8 @@ folder_colors={
 "res://CORE/Scripts/Common/": "red",
 "res://EXPORT/": "gray",
 "res://Sandbox/": "orange",
-"res://Sandbox/core/Game/": "purple"
+"res://Sandbox/core/Game/": "purple",
+"res://Sandbox/core/Game/Script/": "red"
 }
 
 [input]

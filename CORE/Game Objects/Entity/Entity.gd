@@ -36,10 +36,10 @@ func _ready() -> void:
 		component.init(self)
 
 
-func _process(_delta:float) -> void:
+func _process(delta:float) -> void:
 	for component in self.components:
 		if component.has_method('tick'):
-			component.tick.call(_delta)
+			component.tick.call(delta)
 
 
 # Setters.

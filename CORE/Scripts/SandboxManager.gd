@@ -15,6 +15,7 @@ const Game_component_path:String = Game_path+'/Component'
 const Game_tile_component_path:String = Game_component_path+'/Tile'
 const Game_entity_component_path:String = Game_component_path+'/Entity'
 const Game_generator_component_path:String = Game_component_path+'/Generator'
+const Game_script_path:String = Game_path+'/Script'
 
 # Placeholder objects.
 var Placeholder_texture:Texture2D
@@ -34,6 +35,7 @@ var components:Dictionary[String,GDScript] = {}
 var tile_components:Dictionary[String,GDScript] = {}
 var entity_components:Dictionary[String,GDScript] = {}
 var generator_components:Dictionary[String,GDScript] = {}
+var scripts:Dictionary[String,GDScript] = {}
 
 
 
@@ -135,6 +137,13 @@ func load_sandbox(root_path:String) -> void:
 		var script = load(root_path+'/'+Game_generator_component_path+'/'+filename)
 		self.generator_components[script.name] = script
 
+	# Load scripts.
+	var game_script_directory = DirAccess.open(root_path+'/'+Game_script_path)
+	for filename:String in game_script_directory.get_files():
+		if not filename.ends_with('.gd'): continue
+		var script = load(root_path+'/'+Game_script_path+'/'+filename)
+		self.scripts[script.name] = script
+
 
 
 
@@ -161,3 +170,8 @@ func get_tile(id:String, default=null): ## Returns tile data from the tile ID. I
 func get_entity(id:String, default=null):
 	var entity = self.entities.get(id)
 	return entity if entity else default
+
+
+func sandbox_get_script(id:String, default=null):
+	var script = self.scripts.get(id)
+	return script if script else default

@@ -71,7 +71,15 @@ static func construct(data:Dictionary) -> Tile:
 func _ready() -> void:
 	for component:Component in self.components:
 		component.init.call_deferred(self) # Assign component instance to this tile.
+		if component.has_method('tick'):
+			self.process_mode = Node.PROCESS_MODE_INHERIT
 	self.tile_update.emit.call_deferred()
+
+
+func _process(delta:float) -> void:
+	for component in self.components:
+		if component.has_method('tick'):
+			component.tick.call(delta)
 
 
 

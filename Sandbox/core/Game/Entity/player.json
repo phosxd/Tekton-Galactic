@@ -9,6 +9,9 @@
 		"mass": 250,
 	},
 	"COMPONENTS": {
+		"master_script": {
+			"id": "player_entity_master",
+		},
 		"2d_movement": {
 			"controller": "user",
 			"maximum_directional_force": 250,
@@ -16,6 +19,12 @@
 		},
 		"shape": {
 			"normal": {"id": "player"},
+		},
+		"raycast": {
+			"position": [0, 0.5],
+			"collision_layers": [
+				"physcis_objects",
+			],
 		},
 	},
 }

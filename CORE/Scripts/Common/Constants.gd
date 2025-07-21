@@ -7,3 +7,9 @@ const directions_dictionary:Dictionary[String,Vector2i] = {
 	'left': Vector2i.LEFT,
 	'right': Vector2i.RIGHT,
 }
+enum collision_layers {
+	PHYSICS_OBJECTS,
+}
+const collision_layers_dictionary:Dictionary[String, collision_layers] = {
+	'physics_objects': collision_layers.PHYSICS_OBJECTS
+}
