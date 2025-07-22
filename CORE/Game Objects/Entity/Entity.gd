@@ -32,7 +32,13 @@ static func construct(data:Dictionary) -> Entity:
 
 
 func _ready() -> void:
+	var delayed_components:Array[Component] = []
 	for component:Component in self.components:
+		if component.get('delayed'):
+			delayed_components.append(component)
+			continue
+		component.init(self)
+	for component:Component in delayed_components:
 		component.init(self)
 
 

@@ -21,7 +21,7 @@
 			"normal": {"id": "player"},
 		},
 		"raycast": {
-			"position": [0, 0.5],
+			"position": [0, -0.3],
 			"collision_layers": [
 				"physcis_objects",
 			],

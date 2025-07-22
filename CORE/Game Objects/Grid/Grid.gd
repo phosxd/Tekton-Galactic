@@ -250,25 +250,3 @@ func _on_body_shape_entered(_body_rid:RID, body:Node, _body_shape_index:int, loc
 	if tile is not Tile: return
 	if body is Grid:
 		_resolve_collision(body, tile)
-
-
-func _on_input_event(_viewport:Node, event:InputEvent, shape_idx:int) -> void:
-	if event.is_action_pressed('right_click'):
-		var node:Node = _get_child_from_shape_idx(shape_idx)
-		if not node: return
-		if node is not Tile: return
-		self.destroy_tile(node)
-
-
-func _on_mouse_shape_entered(shape_idx:int) -> void:
-	var node:Node = _get_child_from_shape_idx(shape_idx)
-	if not node: return
-	if node is not Tile: return
-	node.start_hovering_tile.call_deferred()
-
-
-func _on_mouse_shape_exited(shape_idx:int) -> void:
-	var node:Node = _get_child_from_shape_idx(shape_idx)
-	if not node: return
-	if node is not Tile: return
-	node.stop_hovering_tile()

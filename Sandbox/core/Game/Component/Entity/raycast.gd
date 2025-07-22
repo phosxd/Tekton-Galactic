@@ -3,16 +3,16 @@
 extends EntityComponent
 const name := 'raycast'
 
-var Ray:RayCast2D
+var ray:RayCast2D
 
 
 func init(object:Entity) -> void: ## Initialize the component on the entity.
-	Ray = RayCast2D.new()
+	ray = RayCast2D.new()
 
 	# Set basic settings.
-	Ray.hit_from_inside = true
-	Ray.collide_with_areas = true
-	Ray.collide_with_bodies = true
+	ray.hit_from_inside = true
+	ray.collide_with_areas = true
+	ray.collide_with_bodies = true
 
 	# Set position.
 	var position = self.parameters.get('position', [0,0])
@@ -20,7 +20,7 @@ func init(object:Entity) -> void: ## Initialize the component on the entity.
 	if position.size() != 2: return
 	for axis in position:
 		if axis is not int && axis is not float: return
-	Ray.position = Vector2(position[0], position[1])
+	ray.position = Vector2(position[0], position[1])
 
 	# Set collision layers.
 	var collision_layers = self.parameters.get('collision_layers', [])
@@ -29,20 +29,20 @@ func init(object:Entity) -> void: ## Initialize the component on the entity.
 		if layer is not String: continue
 		var layer_number = Constants.collision_layers_dictionary.get(layer)
 		if not layer_number: continue
-		Ray.set_collision_mask_value(layer_number, true)
+		ray.set_collision_mask_value(layer_number, true)
 
-	object.add_child(Ray)
+	object.add_child(ray)
 
 
 func get_colliding_object(): ## Returns the first object that was hit by the raycast.
-	return Ray.get_collider()
+	return ray.get_collider()
 
 
 func get_colliding_shape(): ## Returns the first collision shape of the colliding object that was hit by the raycast.
-	var hit_object = Ray.get_collider()
+	var hit_object = ray.get_collider()
 	if not hit_object: return
 
-	var shape_id = Ray.get_collider_shape()
+	var shape_id = ray.get_collider_shape()
 	if shape_id > hit_object.get_shape_owners().size()-1: return
 	var shape_owner_id:int = hit_object.shape_find_owner(shape_id)
 	if shape_owner_id not in hit_object.get_shape_owners(): return
@@ -53,4 +53,4 @@ func get_colliding_shape(): ## Returns the first collision shape of the collidin
 
 
 func set_target_position(position:Vector2) -> void:
-	Ray.target_position = position
+	ray.target_position = position
