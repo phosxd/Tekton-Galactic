@@ -19,8 +19,9 @@ script = ExtResource("1_2g84l")
 unique_name_in_owner = true
 self_modulate = Color(1, 1, 1, 0.607843)
 
+[node name="Tile MMIs" type="Node2D" parent="."]
+unique_name_in_owner = true
+editor_description = "Children of this node are distinct MultiMeshInstance2D Node's that render Tiles. There is a separate MMI for each Tile type."
+
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
-[connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="mass_updated" from="." to="." method="_on_mass_updated"]
-[connection signal="mouse_shape_entered" from="." to="." method="_on_mouse_shape_entered"]
-[connection signal="mouse_shape_exited" from="." to="." method="_on_mouse_shape_exited"]

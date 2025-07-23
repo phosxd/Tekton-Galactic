@@ -54,6 +54,13 @@ size = Vector2(4, 4)
 tile_id = &"core:stone"
 metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
 
+[node name="square6" type="Node2D" parent="Grids"]
+position = Vector2(12, -34)
+script = ExtResource("2_fj2j1")
+size = Vector2(10, 10)
+tile_id = &"core:stone"
+metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
+
 [node name="square7" type="Node2D" parent="Grids"]
 position = Vector2(-13, -12)
 script = ExtResource("2_fj2j1")

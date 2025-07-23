@@ -15,6 +15,7 @@ static func construct() -> Grid:
 	var cm_visualizer_texture = SandboxManager.get_texture('center_of_mass_visualizer')
 	new_grid.get_node('%CM Visualizer').texture = cm_visualizer_texture
 	new_grid.get_node('%CM Visualizer').scale = Vector2(Vector2.ONE/cm_visualizer_texture.get_size())
+
 	return new_grid
 
 
@@ -23,7 +24,7 @@ func _process(_delta:float) -> void:
 
 
 
-# Mehtods.
+# Methods.
 # --------
 func get_center() -> Vector2: ## Gets center of the Grid, based on center of mass.
 	return self.center_of_mass + self.position
@@ -48,6 +49,7 @@ func add_tile(tile:Tile, position:Vector2i, extra_operations:bool=true) -> bool:
 		self.add_child(tile)
 	else:
 		tile.get_grid().tiles.erase(tile.grid_position)
+		tile.get_grid()._remove_tile_from_mmi(tile)
 		tile.reparent(self)
 
 	var current_tile = self.get_tile(tile.grid_position)
@@ -56,6 +58,7 @@ func add_tile(tile:Tile, position:Vector2i, extra_operations:bool=true) -> bool:
 
 	self.tiles.set(tile.grid_position, tile)
 	self.tile_added.emit(tile)
+	_add_tile_to_mmi.call_deferred(tile)
 
 	if extra_operations:
 		_calculate_mass()
@@ -76,6 +79,7 @@ func destroy_tile(tile:Tile, extra_operations:bool=true) -> bool: ## Destroys th
 	if tile.get_grid() != self: return false
 
 	tile.before_destroyed.emit()
+	_remove_tile_from_mmi(tile)
 	self.tiles.erase(tile.grid_position)
 	tile.queue_free()
 	tile.after_destroyed.emit()
@@ -112,6 +116,28 @@ func disconnect_tile(tile:Tile, extra_operations:bool=true) -> void: ## Disconne
 
 # Internal Utility.
 # -----------------
+func _add_mmi(name:String, texture:Texture2D, texture_filter:CanvasItem.TextureFilter) -> TileMMI:
+	var mmi := TileMMI.new(texture, texture_filter)
+	mmi.name = name
+	%'Tile MMIs'.add_child(mmi)
+	return mmi
+
+
+func _add_tile_to_mmi(tile:Tile) -> bool:
+	var mmi = %'Tile MMIs'.get_node_or_null(str(tile.hashed_id))
+	if not mmi:
+		mmi = _add_mmi(str(tile.hashed_id), tile.get_texture_node().texture, tile.get_texture_node().texture_filter)
+	mmi.add_tile(Transform2D(tile.rotation, tile.scale*tile.get_texture_node().scale, 0, tile.grid_position))
+	return true
+
+
+func _remove_tile_from_mmi(tile:Tile) -> bool:
+	var mmi = %'Tile MMIs'.get_node_or_null(str(tile.hashed_id))
+	if not mmi: return false
+	mmi.remove_tile(tile.grid_position)
+	return true
+
+
 func _iterate_tiles(function=null, calculate_mass:bool=false, tiles_array_override=null) -> void: ## Efficiently iterates over each tile in the grid.
 	var total_position := Vector2(0,0)
 	var total_mass:float = 0
@@ -184,8 +210,9 @@ func _find_separate_sections() -> Array[Array]:
 	var passed_tiles:Dictionary[Tile,Variant] = {}
 	for tile:Tile in self.tiles.values():
 		if not tile: continue
-		if not is_instance_valid(tile): continue
 		if tile.is_queued_for_deletion(): continue
+		var neighbor_tiles = tile.get_neighbors().values()
+		if neighbor_tiles.find(null) == -1: continue # Move on if the tile has all sides occupied.
 		var result := _recursive_tile_search([], tile, passed_tiles)
 		passed_tiles = result.passed_tiles
 		if result.new_section.size() > 0:
@@ -204,9 +231,11 @@ func _recursive_tile_search(section:Array, origin_tile:Tile, passed_tiles:Dictio
 		if not is_instance_valid(tile): continue
 		if tile.is_queued_for_deletion(): continue
 		if passed_tiles.has(tile): continue
+		var neighbor_tiles = tile.get_neighbors().values()
+		if neighbor_tiles.find(null) == -1: continue # Move on if the tile has all sides occupied.
 		section.append(tile)
 		passed_tiles.set(tile, null)
-		for neighbor:Tile in tile.get_neighbors().values():
+		for neighbor:Tile in neighbor_tiles:
 			tiles_to_check.append(neighbor)
 
 	return {
@@ -235,13 +264,11 @@ func _get_child_from_shape_idx(shape_index:int):
 
 
 
-
-
 # Callbacks.
 # ----------
 func _on_mass_updated() -> void:
 	%'CM Visualizer'.position = self.center_of_mass # Update position of visualizer.
-	self.move_child(%'CM Visualizer', self.get_child_count()-1) # Move node to front, to draw in front of all tiles.
+	%'CM Visualizer'.move_to_front()
 
 
 func _on_body_shape_entered(_body_rid:RID, body:Node, _body_shape_index:int, local_shape_index:int) -> void:

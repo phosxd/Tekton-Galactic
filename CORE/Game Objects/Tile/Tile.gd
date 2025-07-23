@@ -18,6 +18,7 @@ signal after_destroyed
 signal after_disconnected
 
 var id:StringName ## Tile's type ID.
+var hashed_id:int ## Tile's type ID, but hashed.
 var components:Array[Component] = [] ## Tile's components.
 var mass:float ## Tile's mass.
 var integrity:float ## Tile's integrity.
@@ -49,6 +50,7 @@ static func construct(data:Dictionary) -> Tile:
 		new_tile.components.append(new_component)
 
 	new_tile.id = StringName(data.HEADER.id)
+	new_tile.hashed_id = hash(new_tile.id)
 	new_tile.mass = data.DETAILS.mass
 	new_tile.integrity = data.DETAILS.integrity
 	new_tile.elasticity = data.DETAILS.elasticity
@@ -126,6 +128,10 @@ func get_neighbors() -> Dictionary[String,Tile]:
 		'down': self.get_tile_from_offset(Vector2i.DOWN),
 		'left': self.get_tile_from_offset(Vector2i.LEFT),
 		'right': self.get_tile_from_offset(Vector2i.RIGHT),
+		'top_left': self.get_tile_from_offset(Vector2i.UP+Vector2i.LEFT),
+		'top_right': self.get_tile_from_offset(Vector2i.UP+Vector2i.RIGHT),
+		'bottom_left': self.get_tile_from_offset(Vector2i.DOWN+Vector2i.LEFT),
+		'bottom_right': self.get_tile_from_offset(Vector2i.DOWN+Vector2i.RIGHT),
 	}
 	return tiles
 

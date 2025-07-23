@@ -10,6 +10,7 @@ script = ExtResource("1_gbypl")
 
 [node name="Texture Mask" type="Node2D" parent="."]
 unique_name_in_owner = true
+visible = false
 
 [node name="Texture" type="Sprite2D" parent="Texture Mask"]
 unique_name_in_owner = true

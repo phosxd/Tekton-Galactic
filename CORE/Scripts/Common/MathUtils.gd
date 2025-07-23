@@ -5,18 +5,16 @@ static func transfer_range_of_value(origin:Vector2, target:Vector2, value:float)
 	return (target.x + (((value - origin.x) / (origin.y - origin.x)) * (target.y - target.x)))
 
 
-static func limit_vector2_value(origin:Vector2, maximum:Vector2, allow_negatives:bool=true) -> Vector2:
+static func limit_vector2_value(origin:Vector2, maximum:Vector2, allow_negatives:bool=true) -> Vector2: ## Limits the values of `origin`. Also applies to negative numbers.
 	var result := Vector2(origin)
 	if origin.x > maximum.x:
 		result.x = maximum.x
 	if origin.y > maximum.y:
 		result.y = maximum.y
 	if origin.x < -maximum.x:
-		if allow_negatives: result.x = -maximum.x
-		else: result.x = 0
+		result.x = -maximum.x
 	if origin.y < -maximum.y:
-		if allow_negatives: result.y = -maximum.y
-		else: result.y = 0
+		result.y = -maximum.y
 
 	return result
 
