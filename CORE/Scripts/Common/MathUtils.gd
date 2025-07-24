@@ -5,7 +5,7 @@ static func transfer_range_of_value(origin:Vector2, target:Vector2, value:float)
 	return (target.x + (((value - origin.x) / (origin.y - origin.x)) * (target.y - target.x)))
 
 
-static func limit_vector2_value(origin:Vector2, maximum:Vector2) -> Vector2: ## Limits the values of `origin`. Also applies to negative numbers.
+static func limit_vector2_value(origin:Vector2, maximum:Vector2) -> Vector2: ## Limits the values of `origin`.
 	var result := Vector2(origin)
 	if origin.x > maximum.x:
 		result.x = maximum.x
@@ -17,6 +17,11 @@ static func limit_vector2_value(origin:Vector2, maximum:Vector2) -> Vector2: ## 
 		result.y = -maximum.y
 
 	return result
+
+
+static func circular_clamp(origin:Vector2, maximum_radius:float) -> Vector2: ## Limits the values of `origin` to a radius.
+	if origin.length() > maximum_radius: return origin.normalized() * maximum_radius
+	else: return origin
 
 
 static func calculate_gravitational_force(g:float, first_position:Vector2, second_position:Vector2, first_mass:float, second_mass:float) -> Vector2:

@@ -34,6 +34,7 @@ func _ready() -> void:
 		if total_mass <= 0: total_mass = 0.00001
 		grid.center_of_mass = total_position/count
 		grid.mass = total_mass
+		grid.mass_updated.emit()
 	)
 
 	grid.position = self.position

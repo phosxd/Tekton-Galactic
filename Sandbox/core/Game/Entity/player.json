@@ -11,6 +11,7 @@
 	"COMPONENTS": {
 		"master_script": {
 			"id": "player_entity_master",
+			"max_reach": 5.0,
 		},
 		"2d_movement": {
 			"controller": "user",

@@ -15,7 +15,7 @@ func init(object) -> void:
 	script_instance = script_resource.new()
 
 	# Initialize script.
-	script_instance.init(object)
+	script_instance.init(object, self.parameters)
 
 
 func tick(delta:float) -> void:

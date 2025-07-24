@@ -50,17 +50,17 @@ func _process(delta:float) -> void:
 
 # Setters.
 # --------
-func set_main_shape(shape:Shape2D, shape_rotation_degrees:float=0) -> void:
+func set_main_shape(shape:Shape2D, shape_rotation_degrees:float=0, clip_texture:bool=false) -> void:
 	%'Shape'.set_shape(shape)
 	%"Shape".rotation_degrees = shape_rotation_degrees
+	%'Texture Mask'.clip_children = CLIP_CHILDREN_ONLY if clip_texture else CLIP_CHILDREN_DISABLED
 
 
-func set_main_texture(texture:Texture2D, in_world_size:Vector2=Vector2.ONE, clip_to_fit_shape:bool=false, filter:TextureFilter=TEXTURE_FILTER_NEAREST) -> void:
+func set_main_texture(texture:Texture2D, in_world_size:Vector2=Vector2.ONE, filter:TextureFilter=TEXTURE_FILTER_NEAREST) -> void:
 	if not texture: return
 	%Texture.texture = texture
 	%Texture.texture_filter = filter
 	%Texture.scale = Vector2(in_world_size/texture.get_size())
-	%'Texture Mask'.clip_children = CLIP_CHILDREN_ONLY if clip_to_fit_shape else CLIP_CHILDREN_DISABLED
 
 
 # Methods.
@@ -70,6 +70,7 @@ func set_main_texture(texture:Texture2D, in_world_size:Vector2=Vector2.ONE, clip
 # Internal.
 # ---------
 func _draw_texture_mask() -> void:
+	if %'Texture Mask'.clip_children == CanvasItem.CLIP_CHILDREN_DISABLED: return
 	if %Shape.shape is RectangleShape2D:
 		%'Texture Mask'.draw_rect(%Shape.shape.get_rect(), Color.WHITE)
 	elif %Shape.shape is CircleShape2D:
