@@ -12,12 +12,12 @@
 	},
 	"COMPONENTS": {
 		"texture": {
-			"clip_to_fit_shape": true,
 			"variants": ["stone_1", "stone_2"],
 		},
 		"shape": {
 			"use_surface_polygon": true,
 			"normal": {"id": "tile_square"},
+			"slope": {"id": "tile_slope", "clip_texture":true}
 		},
 	},
 }

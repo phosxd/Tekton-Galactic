@@ -12,7 +12,6 @@
 	},
 	"COMPONENTS": {
 		"texture": {
-			"clip_to_fit_shape": true,
 			"variants": ["unobtainium"],
 		},
 		"shape": {

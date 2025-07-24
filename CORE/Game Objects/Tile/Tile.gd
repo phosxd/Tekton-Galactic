@@ -8,6 +8,9 @@ const default_collision_shape:Shape2D = preload('res://CORE/Game Objects/Tile/de
 const default_texture:Texture2D = preload('res://CORE/Game Objects/Tile/default_texture.tres')
 
 var grid_position := Vector2i() ## Used to determine the true position of the tile. `Node2D.position` is unreliable when parent Grid is moving in space.
+var render_group:int
+var in_world_texture_size:Vector2
+var clip_texture:bool = false
 
 signal tile_update
 signal neighbor_tile_update(direction:Vector2i)
@@ -18,7 +21,6 @@ signal after_destroyed
 signal after_disconnected
 
 var id:StringName ## Tile's type ID.
-var hashed_id:int ## Tile's type ID, but hashed.
 var components:Array[Component] = [] ## Tile's components.
 var mass:float ## Tile's mass.
 var integrity:float ## Tile's integrity.
@@ -50,7 +52,6 @@ static func construct(data:Dictionary) -> Tile:
 		new_tile.components.append(new_component)
 
 	new_tile.id = StringName(data.HEADER.id)
-	new_tile.hashed_id = hash(new_tile.id)
 	new_tile.mass = data.DETAILS.mass
 	new_tile.integrity = data.DETAILS.integrity
 	new_tile.elasticity = data.DETAILS.elasticity
@@ -60,6 +61,7 @@ static func construct(data:Dictionary) -> Tile:
 	new_tile.set_main_texture()
 
 	new_tile.tile_update.connect(new_tile._tile_update)
+	new_tile.neighbor_tile_update.connect(new_tile._neighbor_tile_update)
 	new_tile.before_destroyed.connect(new_tile._before_destroyed)
 	new_tile.before_disconnected.connect(new_tile._before_disconnected)
 	new_tile.after_destroyed.connect(new_tile._after_destroyed)
@@ -75,7 +77,7 @@ func _ready() -> void:
 		component.init.call_deferred(self) # Assign component instance to this tile.
 		if component.has_method('tick'):
 			self.process_mode = Node.PROCESS_MODE_INHERIT
-	self.tile_update.emit.call_deferred()
+	self.render.call_deferred()
 
 
 func _process(delta:float) -> void:
@@ -88,19 +90,29 @@ func _process(delta:float) -> void:
 
 # Setters.
 # --------
-func set_main_shape(shape:Shape2D, rotation_degrees:float=0) -> void:
+func set_main_shape(shape:Shape2D, rotation_degrees:float=0, clip_texture:bool=false) -> void:
 	if shape == self.shape && rotation_degrees == self.rotation_degrees: return
 	self.set_shape(shape)
 	self.rotation_degrees = rotation_degrees
-	%'Texture Mask'.queue_redraw()
+	self.clip_texture = clip_texture
+	if clip_texture && shape.get_rect().size.abs() >= %Texture.texture.get_size()*%Texture.scale:
+		%'Texture Mask'.clip_children = CLIP_CHILDREN_ONLY
+		%'Texture Mask'.queue_redraw()
+	else:
+		%'Texture Mask'.clip_children = CLIP_CHILDREN_DISABLED
 
 
-func set_main_texture(texture:Texture2D=default_texture, in_world_size:Vector2=Vector2.ONE, clip_to_fit_shape:bool=false, filter:TextureFilter=TEXTURE_FILTER_NEAREST) -> void:
+func set_main_texture(texture:Texture2D=default_texture, in_world_size:Vector2=Vector2.ONE, filter:TextureFilter=TEXTURE_FILTER_NEAREST) -> void:
 	if not texture: return
 	%Texture.texture = texture
 	%Texture.texture_filter = filter
 	%Texture.scale = Vector2(in_world_size/texture.get_size())
-	%'Texture Mask'.clip_children = CLIP_CHILDREN_ONLY if clip_to_fit_shape else CLIP_CHILDREN_DISABLED
+	self.in_world_texture_size = in_world_size
+	if self.clip_texture && self.shape.get_rect().size.abs() >= %Texture.texture.get_size()*%Texture.scale:
+		%'Texture Mask'.clip_children = CLIP_CHILDREN_ONLY
+		%'Texture Mask'.queue_redraw()
+	else:
+		%'Texture Mask'.clip_children = CLIP_CHILDREN_DISABLED
 
 
 
@@ -112,8 +124,23 @@ func get_grid():
 	return parent if parent is Grid else null
 
 
+func render() -> void: ## Attempts to render the tile as an TileMMI instance.
+	self.render_group = hash(%Texture.texture)+hash(%Texture.texture_filter)
+	self.get_grid().remove_instance_from_mmi(self.render_group, self.grid_position)
+	if %'Texture Mask'.clip_children != CanvasItem.CLIP_CHILDREN_DISABLED:
+		%'Texture Mask'.visible = true
+		return
+	%'Texture Mask'.visible = false # This will make both the texture & the texture mask invisible.
+	self.get_grid().add_instance_to_mmi(
+		self.render_group,
+		%Texture.texture,
+		%Texture.texture_filter,
+		Transform2D(self.rotation+%Texture.rotation, self.scale*%Texture.scale, self.skew+%Texture.skew, self.grid_position),
+	)
+
+
 func get_texture_node() -> Sprite2D:
-	return %'Texture'
+	return %Texture
 
 
 func get_tile_from_offset(offset:Vector2i): ## Gets a tile from the parent `grid` using this `tile`'s position and the offset.
@@ -165,6 +192,7 @@ func wake() -> void:
 # Internal.
 # ---------
 func _draw_texture_mask() -> void:
+	if not self.clip_texture: return
 	if self.shape is RectangleShape2D:
 		%'Texture Mask'.draw_rect(self.shape.get_rect(), Color.WHITE)
 	elif self.shape is CircleShape2D:
@@ -187,11 +215,11 @@ func _emit_neighbor_updates() -> void:
 # Callbacks.
 # ----------
 func _before_destroyed() -> void:
-	self.tile_update.emit()
+	self.get_grid().remove_instance_from_mmi(self.render_group, self.grid_position)
 
 
 func _before_disconnected() -> void:
-	self.tile_update.emit()
+	self.get_grid().remove_instance_from_mmi(self.render_group, self.grid_position)
 
 
 func _after_destroyed() -> void:
@@ -199,8 +227,12 @@ func _after_destroyed() -> void:
 
 
 func _after_disconnected() -> void:
-	pass
+	self.render()
 
 
 func _tile_update() -> void:
 	self._emit_neighbor_updates()
+
+
+func _neighbor_tile_update(direction:Vector2i) -> void:
+	pass

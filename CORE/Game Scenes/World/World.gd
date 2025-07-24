@@ -2,14 +2,16 @@ class_name World extends Node2D
 
 const G:float = 0.001/100
 
+var player:Entity
+
 
 func _ready() -> void:
-	var entity_data = SandboxManager.get_entity('core:player').data
-	var entity := Entity.construct(entity_data)
-	entity.position = Vector2(0,0)
-	$Entities.add_child(entity)
+	var player_data = SandboxManager.get_entity('core:player').data
+	player = Entity.construct(player_data)
+	player.position = Vector2(0,0)
+	$Entities.add_child(player)
 	%Camera.position = Vector2(0,0)
-	%Camera.reparent(entity)
+	%Camera.reparent(player)
 
 
 func _process(_delta:float) -> void:

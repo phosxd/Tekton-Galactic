@@ -43,8 +43,6 @@ position = Vector2(77, 159)
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_g6luc")
 
-[node name="Entities" type="Node2D" parent="."]
-
 [node name="Grids" type="Node2D" parent="."]
 
 [node name="square5" type="Node2D" parent="Grids"]
@@ -73,7 +71,7 @@ position = Vector2(-14, 0)
 rotation = 0.567232
 script = ExtResource("2_fj2j1")
 size = Vector2(5, 5)
-tile_id = &"core:test"
+tile_id = &"core:stone"
 metadata/_custom_type_script = "uid://ckp6xp6sqsm2e"
 
 [node name="Planets" type="Node2D" parent="."]
@@ -89,3 +87,5 @@ metadata/_custom_type_script = "uid://hsb8h3hoj6iy"
 unique_name_in_owner = true
 ignore_rotation = false
 zoom = Vector2(20, 20)
+
+[node name="Entities" type="Node2D" parent="."]

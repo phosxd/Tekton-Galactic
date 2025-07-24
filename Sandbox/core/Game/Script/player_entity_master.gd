@@ -1,11 +1,14 @@
 ## Master script for the "player" entity.
 const name := 'player_entity_master'
 
-const max_reach := 5 ## The radius in which the player can reach.
+const max_reach:int = 5 ## The radius in which the player can reach.
+const max_reach_vector := Vector2(max_reach, max_reach)
 
 var player_entity:Entity
 var raycast_component:Component
 var raycast_last_hit_tile:Tile
+
+
 
 
 func init(object:Entity) -> void:
@@ -20,8 +23,7 @@ func init(object:Entity) -> void:
 func tick(_delta:float) -> void:
 	# Get position the player is hovering over, limited with max reach.
 	var grabbed_point := player_entity.get_local_mouse_position() ## The position the player is currently hovering over.
-	grabbed_point = grabbed_point.normalized() * max_reach
-	
+	grabbed_point = grabbed_point.normalized() * MathUtils.limit_vector2_value(grabbed_point, max_reach_vector).abs() # Limit to the max reach, in a circular radius.
 
 	# Hover over tile using raycast component.
 	raycast_component.set_target_position(grabbed_point)
@@ -45,5 +47,7 @@ func tick(_delta:float) -> void:
 
 
 # Callbacks.
+# ----------
 func _draw_ray() -> void:
-	raycast_component.ray.draw_line(raycast_component.ray.position, raycast_component.ray.target_position, Color.WHITE, 0.1, true)
+	raycast_component.ray.draw_dashed_line(raycast_component.ray.position, raycast_component.ray.target_position, Color.WHITE, 0.075, 0.2, true, false)
+	raycast_component.ray.draw_circle(raycast_component.ray.target_position, 0.2, Color.WHITE, false, 0.075)

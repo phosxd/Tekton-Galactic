@@ -19,7 +19,7 @@ func init(object) -> void:
 	if self.parameters.get('normal') == null: return
 	self.normal_shape = SandboxManager.get_shape(self.parameters.normal.id)
 	if not normal_shape: return
-	var slope_shape_id = self.parameters.get('slope', self.parameters.normal.id)
+	var slope_shape_id = self.parameters.get('slope', self.parameters.normal).id
 	self.slope_shape = SandboxManager.get_shape(slope_shape_id, normal_shape)
 	self.use_surface_polygon = self.parameters.get('use_surface_polygon', false)
 
@@ -38,23 +38,25 @@ func init(object) -> void:
 
 
 func update_shape(_tile_direction:Vector2i) -> void:
-	self.object.set_main_shape(self.normal_shape, 0)
+	var normal_clip:bool = self.parameters.normal.get('clip_texture',false)
+	self.object.set_main_shape(self.normal_shape, 0, normal_clip)
 	if self.slope_shape != self.normal_shape:
 		var neighbors:Dictionary[String,Tile] = self.object.get_neighbors()
 		var up = neighbors.up
 		var down = neighbors.down
 		var left = neighbors.left
 		var right = neighbors.right
+		var slope_clip:bool = self.parameters.slope.get('clip_texture',false)
 		if not up && down && left && not right:
-			self.object.set_main_shape(self.slope_shape, 0)
+			self.object.set_main_shape(self.slope_shape, 0, slope_clip)
 		elif not up && down && not left && right:
-			self.object.set_main_shape(self.slope_shape, -90)
+			self.object.set_main_shape(self.slope_shape, -90, slope_clip)
 		elif up && not down && left && not right:
-			self.object.set_main_shape(self.slope_shape, 90)
+			self.object.set_main_shape(self.slope_shape, 90, slope_clip)
 		elif up && not down && not left && right:
-			self.object.set_main_shape(self.slope_shape, 180)
+			self.object.set_main_shape(self.slope_shape, 180, slope_clip)
 		else:
-			self.object.set_main_shape(self.normal_shape, 0)
+			self.object.set_main_shape(self.normal_shape, 0, normal_clip)
 
 
 func generate_surface_polygon() -> PackedVector2Array:

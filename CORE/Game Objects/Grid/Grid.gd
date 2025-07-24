@@ -48,9 +48,11 @@ func add_tile(tile:Tile, position:Vector2i, extra_operations:bool=true) -> bool:
 	if tile.get_grid() == null:
 		self.add_child(tile)
 	else:
+		tile.before_disconnected.emit()
 		tile.get_grid().tiles.erase(tile.grid_position)
-		tile.get_grid()._remove_tile_from_mmi(tile)
 		tile.reparent(self)
+		tile.after_disconnected.emit()
+		tile.tile_update.emit()
 
 	var current_tile = self.get_tile(tile.grid_position)
 	if current_tile != null:
@@ -58,7 +60,6 @@ func add_tile(tile:Tile, position:Vector2i, extra_operations:bool=true) -> bool:
 
 	self.tiles.set(tile.grid_position, tile)
 	self.tile_added.emit(tile)
-	_add_tile_to_mmi.call_deferred(tile)
 
 	if extra_operations:
 		_calculate_mass()
@@ -75,14 +76,13 @@ func add_tiles(tiles:Array[Tile], positions:Array[Vector2i]) -> void: ## Adds th
 
 func destroy_tile(tile:Tile, extra_operations:bool=true) -> bool: ## Destroys the given tile. Recalculates grid mass if `extra_operations` is true. Returns `true` if succesfully destroyed the tile.
 	if not tile: return false
-	if not is_instance_valid(tile): return false
 	if tile.get_grid() != self: return false
 
 	tile.before_destroyed.emit()
-	_remove_tile_from_mmi(tile)
 	self.tiles.erase(tile.grid_position)
 	tile.queue_free()
 	tile.after_destroyed.emit()
+	tile.tile_update.emit()
 
 	if extra_operations:
 		_calculate()
@@ -97,8 +97,7 @@ func disconnect_tile(tile:Tile, extra_operations:bool=true) -> void: ## Disconne
 	new_grid.rotation = self.rotation
 	# Randomly disconnect neighboring tiles.
 	for neighbor:Tile in tile.get_neighbors().values():
-		if not neighbor: continue 
-		if not is_instance_valid(neighbor): continue
+		if not neighbor: continue
 		if randi_range(0,1) == 0: continue
 		neighbor.before_disconnected.emit()
 		new_grid.add_tile(neighbor, neighbor.grid_position)
@@ -116,25 +115,25 @@ func disconnect_tile(tile:Tile, extra_operations:bool=true) -> void: ## Disconne
 
 # Internal Utility.
 # -----------------
-func _add_mmi(name:String, texture:Texture2D, texture_filter:CanvasItem.TextureFilter) -> TileMMI:
+func _add_mmi(id:int, texture:Texture2D, texture_filter:CanvasItem.TextureFilter) -> TileMMI:
 	var mmi := TileMMI.new(texture, texture_filter)
-	mmi.name = name
+	mmi.name = str(id)
 	%'Tile MMIs'.add_child(mmi)
 	return mmi
 
 
-func _add_tile_to_mmi(tile:Tile) -> bool:
-	var mmi = %'Tile MMIs'.get_node_or_null(str(tile.hashed_id))
+func add_instance_to_mmi(id:int, texture:Texture2D, texture_filter:CanvasItem.TextureFilter, transform:Transform2D) -> bool:
+	var mmi = %'Tile MMIs'.get_node_or_null(str(id))
 	if not mmi:
-		mmi = _add_mmi(str(tile.hashed_id), tile.get_texture_node().texture, tile.get_texture_node().texture_filter)
-	mmi.add_tile(Transform2D(tile.rotation, tile.scale*tile.get_texture_node().scale, 0, tile.grid_position))
+		mmi = _add_mmi(id, texture, texture_filter)
+	mmi.add_tile(transform)
 	return true
 
 
-func _remove_tile_from_mmi(tile:Tile) -> bool:
-	var mmi = %'Tile MMIs'.get_node_or_null(str(tile.hashed_id))
+func remove_instance_from_mmi(id:int, grid_position:Vector2i) -> bool:
+	var mmi = %'Tile MMIs'.get_node_or_null(str(id))
 	if not mmi: return false
-	mmi.remove_tile(tile.grid_position)
+	mmi.remove_tile(grid_position)
 	return true
 
 
@@ -147,7 +146,6 @@ func _iterate_tiles(function=null, calculate_mass:bool=false, tiles_array_overri
 	else: tiles = self.tiles.values()
 
 	for tile:Tile in tiles:
-		if not is_instance_valid(tile): continue
 		count += 1
 		if function:
 			if not function.call(count-1, tile) == true: continue
