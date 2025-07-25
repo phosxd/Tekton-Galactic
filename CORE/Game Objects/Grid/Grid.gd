@@ -37,7 +37,6 @@ func get_energy() -> float:
 func get_tile(position:Vector2i): ## Returns the tile at the given position, if doesn't exist returns null.
 	var tile = self.tiles.get(position)
 	if not tile: return null
-	if not is_instance_valid(tile): return null
 	return tile
 
 
@@ -82,7 +81,7 @@ func destroy_tile(tile:Tile, extra_operations:bool=true) -> bool: ## Destroys th
 	self.tiles.erase(tile.grid_position)
 	tile.queue_free()
 	tile.after_destroyed.emit()
-	tile.tile_update.emit()
+	#tile.tile_update.emit()
 
 	if extra_operations:
 		_calculate()
@@ -166,7 +165,6 @@ func _calculate_mass() -> void: ## Calculates the mass of the grid then stores t
 
 func _calculate() -> void:
 	if not self: return
-	if not is_instance_valid(self): return
 
 	var tile_count:int = 0
 	for key in self.tiles:
@@ -203,7 +201,6 @@ func _calculate() -> void:
 
 
 func _find_separate_sections() -> Array[Array]:
-	if not is_instance_valid(self): return []
 	var sections:Array[Array] = []
 	var passed_tiles:Dictionary[Tile,Variant] = {}
 	for tile:Tile in self.tiles.values():

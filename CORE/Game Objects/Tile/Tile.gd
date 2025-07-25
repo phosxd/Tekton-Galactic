@@ -11,12 +11,12 @@ var grid_position := Vector2i() ## Used to determine the true position of the ti
 var render_group:int
 var in_world_texture_size:Vector2
 var clip_texture:bool = false
+var is_render_queued:bool = false
 
 signal tile_update
 signal neighbor_tile_update(direction:Vector2i)
 signal before_destroyed
 signal before_disconnected
-
 signal after_destroyed
 signal after_disconnected
 
@@ -73,17 +73,23 @@ static func construct(data:Dictionary) -> Tile:
 
 
 func _ready() -> void:
+	# Initialize components.
 	for component:Component in self.components:
 		component.init.call_deferred(self) # Assign component instance to this tile.
 		if component.has_method('tick'):
 			self.process_mode = Node.PROCESS_MODE_INHERIT
-	self.render.call_deferred()
 
 
 func _process(delta:float) -> void:
+	# Process component ticks.
 	for component in self.components:
 		if component.has_method('tick'):
 			component.tick.call(delta)
+
+	# Render if queued.
+	if is_render_queued:
+		self.is_render_queued = false
+		self.render()
 
 
 
@@ -91,7 +97,7 @@ func _process(delta:float) -> void:
 # Setters.
 # --------
 func set_main_shape(shape:Shape2D, rotation_degrees:float=0, clip_texture:bool=false) -> void:
-	if shape == self.shape && rotation_degrees == self.rotation_degrees: return
+	if shape == self.shape && rotation_degrees == self.rotation_degrees && clip_texture == self.clip_texture: return
 	self.set_shape(shape)
 	self.rotation_degrees = rotation_degrees
 	self.clip_texture = clip_texture
@@ -100,10 +106,12 @@ func set_main_shape(shape:Shape2D, rotation_degrees:float=0, clip_texture:bool=f
 		%'Texture Mask'.queue_redraw()
 	else:
 		%'Texture Mask'.clip_children = CLIP_CHILDREN_DISABLED
+	self.queue_render()
 
 
 func set_main_texture(texture:Texture2D=default_texture, in_world_size:Vector2=Vector2.ONE, filter:TextureFilter=TEXTURE_FILTER_NEAREST) -> void:
 	if not texture: return
+	if texture == %Texture.texture && in_world_size == self.in_world_texture_size && filter == %Texture.texture_filter: return
 	%Texture.texture = texture
 	%Texture.texture_filter = filter
 	%Texture.scale = Vector2(in_world_size/texture.get_size())
@@ -113,6 +121,7 @@ func set_main_texture(texture:Texture2D=default_texture, in_world_size:Vector2=V
 		%'Texture Mask'.queue_redraw()
 	else:
 		%'Texture Mask'.clip_children = CLIP_CHILDREN_DISABLED
+	self.queue_render()
 
 
 
@@ -127,7 +136,7 @@ func get_grid():
 func render() -> void: ## Attempts to render the tile as an TileMMI instance.
 	self.render_group = hash(%Texture.texture)+hash(%Texture.texture_filter)
 	self.get_grid().remove_instance_from_mmi(self.render_group, self.grid_position)
-	if %'Texture Mask'.clip_children != CanvasItem.CLIP_CHILDREN_DISABLED:
+	if self.clip_children:
 		%'Texture Mask'.visible = true
 		return
 	%'Texture Mask'.visible = false # This will make both the texture & the texture mask invisible.
@@ -137,6 +146,10 @@ func render() -> void: ## Attempts to render the tile as an TileMMI instance.
 		%Texture.texture_filter,
 		Transform2D(self.rotation+%Texture.rotation, self.scale*%Texture.scale, self.skew+%Texture.skew, self.grid_position),
 	)
+
+
+func queue_render() -> void:
+	self.is_render_queued = true
 
 
 func get_texture_node() -> Sprite2D:
@@ -164,20 +177,22 @@ func get_neighbors() -> Dictionary[String,Tile]:
 
 
 func start_hovering_tile() -> void: ## Let the tile know it is being hovered over by the cursor.
+	return
 	var new_material = ShaderMaterial.new()
 	new_material.shader = SandboxManager.get_shader('tile_highlight')
-	#for neighbor:Tile in self.get_neighbors().values():
-		#if not neighbor: continue
-		#neighbor.get_texture_node().material = new_material
-		#neighbor.get_texture_node().modulate = Color.RED
+	for neighbor:Tile in self.get_neighbors().values():
+		if not neighbor: continue
+		neighbor.get_texture_node().material = new_material
+		neighbor.get_texture_node().modulate = Color.RED
 	self.get_texture_node().material = new_material
 
 
 func stop_hovering_tile() -> void: ## Let the tile know it is no longer being hovered over by the cursor.
-	#for neighbor:Tile in self.get_neighbors().values():
-		#if not neighbor: continue
-		#neighbor.get_texture_node().material = null
-		#neighbor.get_texture_node().modulate = Color.WHITE
+	return
+	for neighbor:Tile in self.get_neighbors().values():
+		if not neighbor: continue
+		neighbor.get_texture_node().material = null
+		neighbor.get_texture_node().modulate = Color.WHITE
 	self.get_texture_node().material = null
 
 
@@ -227,7 +242,7 @@ func _after_destroyed() -> void:
 
 
 func _after_disconnected() -> void:
-	self.render()
+	self.queue_render()
 
 
 func _tile_update() -> void:

@@ -12,7 +12,7 @@
 	},
 	"COMPONENTS": {
 		"texture": {
-			"variants": ["stone_1", "stone_2"],
+			"variants": ["stone_1", "stone_2", "stone_3"],
 		},
 		"shape": {
 			"use_surface_polygon": true,

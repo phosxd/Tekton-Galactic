@@ -3,6 +3,7 @@ class_name TileMMI extends MultiMeshInstance2D
 const empty_transform := Transform2D(0, Vector2.ZERO, 0, Vector2(999999,999999))
 
 var instances:Array[Vector2i] = []
+var empty_instance_indices:Array[int] = []
 
 
 func _init(texture:Texture2D, texture_filter:CanvasItem.TextureFilter) -> void:
@@ -17,12 +18,22 @@ func _init(texture:Texture2D, texture_filter:CanvasItem.TextureFilter) -> void:
 
 
 func add_tile(transform:Transform2D) -> void:
-	instances.append(Vector2i(transform.get_origin()))
-	self.multimesh.instance_count += 1
-	self.multimesh.set_instance_transform_2d.call_deferred(instances.size()-1, Transform2D(transform))
+	var instance_index:int
+	var instance_identifier:Vector2i = Vector2i(transform.get_origin())
+	# Reuse empty instances if possible. Otherwise, append new.
+	if empty_instance_indices.size() > 0:
+		instance_index = empty_instance_indices.pop_at(0)
+		instances[instance_index] = instance_identifier
+	else:
+		instance_index = instances.size()
+		instances.append(instance_identifier)
+		self.multimesh.instance_count += 1
+	# Set instance transform.
+	self.multimesh.set_instance_transform_2d.call_deferred(instance_index, Transform2D(transform))
 
 
 func remove_tile(position:Vector2i) -> void:
 	var index:int = instances.find(position)
 	if index == -1: return
+	empty_instance_indices.append(index)
 	self.multimesh.set_instance_transform_2d(index, empty_transform)

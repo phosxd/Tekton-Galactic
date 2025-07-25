@@ -4,7 +4,6 @@
 [ext_resource type="Shape2D" uid="uid://dhho7we7teq8o" path="res://CORE/Game Objects/Tile/default_collision_shape.tres" id="1_thw1n"]
 
 [node name="Tile" type="CollisionShape2D"]
-process_mode = 4
 shape = ExtResource("1_thw1n")
 script = ExtResource("1_gbypl")
 
